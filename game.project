@@ -1,0 +1,18 @@
+[bootstrap]
+main_collection = /main/main.collectionc
+
+[script]
+shared_state = 1
+
+[display]
+width = 640
+height = 480
+update_frequency = 60
+
+[android]
+input_method = HiddenInputField
+
+[project]
+title = Test
+dependencies = https://github.com/britzl/defold-metrics/archive/master.zip
+
