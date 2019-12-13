@@ -1,4 +1,6 @@
-local PLAYER_SPEED = 8
+WINDOW_WIDTH, WINDOW_HEIGHT = 640, 480
+
+local PLAYER_SPEED = 200
 local PLAYER_WIDTH = 46
 local PLAYER_HEIGHT = 45
 
@@ -23,27 +25,25 @@ function on_message(self, message_id, message, sender)
 end
 
 function on_input(self, action_id, action)
-    if (action_id == hash("MOVE_UP")) then
-        local pos = go.get_position()
-        pos.y = math.min(480 - PLAYER_HEIGHT / 2, pos.y + PLAYER_SPEED * self.dt)
-        go.set_position(pos)
-    elseif (action_id == hash("MOVE_DOWN")) then
-        local pos = go.get_position()
-        pos.y = math.max(PLAYER_HEIGHT / 2, pos.y - PLAYER_SPEED / 2 * self.dt)
-        go.set_position(pos)
-    end
-    if (action_id == hash("MOVE_LEFT")) then
-        local pos = go.get_position()
-        pos.x = math.max(PLAYER_WIDTH / 2, pos.x - PLAYER_SPEED * self.dt)
-        go.set_position(pos)
-    elseif (action_id == hash("MOVE_RIGHT")) then
-        local pos = go.get_position()
-        pos.x = math.min(640 - PLAYER_WIDTH / 2, pos.x + PLAYER_SPEED * self.dt)
-        go.set_position(pos)
-    end
+    handleMovement(self, action_id, action)
 end
 
 function on_reload(self)
     -- Add reload-handling code here
     -- Remove this function if not needed
+end
+
+function handleMovement(self, action_id, action)
+    local pos = go.get_position()
+    if (action_id == hash("MOVE_UP")) then
+        pos.y = math.min(WINDOW_HEIGHT - PLAYER_HEIGHT / 2, pos.y + PLAYER_SPEED * self.dt)
+    elseif (action_id == hash("MOVE_DOWN")) then
+        pos.y = math.max(PLAYER_HEIGHT / 2, pos.y - PLAYER_SPEED * self.dt)
+    end
+    if (action_id == hash("MOVE_LEFT")) then
+        pos.x = math.max(PLAYER_WIDTH / 2, pos.x - PLAYER_SPEED * self.dt)
+    elseif (action_id == hash("MOVE_RIGHT")) then
+        pos.x = math.min(WINDOW_WIDTH - PLAYER_WIDTH / 2, pos.x + PLAYER_SPEED * self.dt)
+    end
+    go.set_position(pos)
 end
