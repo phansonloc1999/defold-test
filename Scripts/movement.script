@@ -1,4 +1,6 @@
-local SPEED = 8
+local PLAYER_SPEED = 8
+local PLAYER_WIDTH = 46
+local PLAYER_HEIGHT = 45
 
 function init(self)
     msg.post(".", "acquire_input_focus")
@@ -23,20 +25,20 @@ end
 function on_input(self, action_id, action)
     if (action_id == hash("MOVE_UP")) then
         local pos = go.get_position()
-        pos.y = math.min(, pos.y + SPEED * self.dt)
+        pos.y = math.min(480 - PLAYER_HEIGHT / 2, pos.y + PLAYER_SPEED * self.dt)
         go.set_position(pos)
     elseif (action_id == hash("MOVE_DOWN")) then
         local pos = go.get_position()
-        pos.y = pos.y - SPEED * self.dt
+        pos.y = math.max(PLAYER_HEIGHT / 2, pos.y - PLAYER_SPEED / 2 * self.dt)
         go.set_position(pos)
     end
     if (action_id == hash("MOVE_LEFT")) then
         local pos = go.get_position()
-        pos.x = pos.x - SPEED * self.dt
+        pos.x = math.max(PLAYER_WIDTH / 2, pos.x - PLAYER_SPEED * self.dt)
         go.set_position(pos)
     elseif (action_id == hash("MOVE_RIGHT")) then
         local pos = go.get_position()
-        pos.x = pos.x + SPEED * self.dt
+        pos.x = math.min(640 - PLAYER_WIDTH / 2, pos.x + PLAYER_SPEED * self.dt)
         go.set_position(pos)
     end
 end
