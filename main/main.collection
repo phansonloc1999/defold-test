@@ -2,9 +2,10 @@ name: "main"
 scale_along_z: 0
 embedded_instances {
   id: "Player"
+  children: "bullet_spawn_pos"
   data: "components {\n"
   "  id: \"movement\"\n"
-  "  component: \"/Scripts/movement.script\"\n"
+  "  component: \"/Scripts/Player.script\"\n"
   "  position {\n"
   "    x: 0.0\n"
   "    y: 0.0\n"
@@ -27,6 +28,24 @@ embedded_instances {
   "\"\n"
   "  position {\n"
   "    x: -1.0\n"
+  "    y: 0.0\n"
+  "    z: 0.0\n"
+  "  }\n"
+  "  rotation {\n"
+  "    x: 0.0\n"
+  "    y: 0.0\n"
+  "    z: 0.0\n"
+  "    w: 1.0\n"
+  "  }\n"
+  "}\n"
+  "embedded_components {\n"
+  "  id: \"bullet_factory\"\n"
+  "  type: \"collectionfactory\"\n"
+  "  data: \"prototype: \\\"/Collections/Bullet.collection\\\"\\n"
+  "load_dynamically: false\\n"
+  "\"\n"
+  "  position {\n"
+  "    x: 0.0\n"
   "    y: 0.0\n"
   "    z: 0.0\n"
   "  }\n"
@@ -81,6 +100,26 @@ embedded_instances {
   position {
     x: 0.0
     y: 0.0
+    z: 0.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale3 {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+}
+embedded_instances {
+  id: "bullet_spawn_pos"
+  data: ""
+  position {
+    x: 0.0
+    y: 26.0
     z: 0.0
   }
   rotation {
