@@ -1,10 +1,30 @@
 name: "main"
+collection_instances {
+  id: "Enemy"
+  collection: "/Collections/Enemy.collection"
+  position {
+    x: 320.0
+    y: 300.0
+    z: 0.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale3 {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+}
 scale_along_z: 0
 embedded_instances {
   id: "Player"
   children: "bullet_spawn_pos"
   data: "components {\n"
-  "  id: \"movement\"\n"
+  "  id: \"Player\"\n"
   "  component: \"/Scripts/Player.script\"\n"
   "  position {\n"
   "    x: 0.0\n"
@@ -59,7 +79,7 @@ embedded_instances {
   ""
   position {
     x: 320.0
-    y: 240.0
+    y: 70.0
     z: 1.0
   }
   rotation {

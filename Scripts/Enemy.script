@@ -1,0 +1,52 @@
+math.randomseed(os.time())
+
+ENEMY_WIDTH, ENEMY_HEIGHT = 27, 25
+ENEMY_HEALTH = 100
+
+function init(self)
+	self.health = ENEMY_HEALTH
+	self.movingToPos = nil
+
+	moveRandomly(self)
+end
+
+function final(self)
+	-- Add finalization code here
+	-- Remove this function if not needed
+end
+
+function update(self, dt)
+end
+
+function on_message(self, message_id, message, sender)
+	if (message_id == hash("trigger_response")) then
+		if (message.group == hash("bullets")) then
+			self.health = math.max(0, self.health - 30)
+			if (self.health == 0) then go.delete() end
+		end
+	end
+end
+
+function on_input(self, action_id, action)
+	-- Add input-handling code here
+	-- Remove this function if not needed
+end
+
+function on_reload(self)
+	-- Add reload-handling code here
+	-- Remove this function if not needed
+end
+
+function getRandomPos()
+	return { x = math.random(ENEMY_WIDTH / 2, WINDOW_WIDTH - ENEMY_WIDTH / 2), y = math.random(ENEMY_HEIGHT / 2, WINDOW_HEIGHT - ENEMY_HEIGHT / 2) }
+end
+
+
+local MOVE_DURATION = 2
+function moveRandomly(self)
+	self.movingToPos = getRandomPos()
+	go.animate(".", "position.x", go.PLAYBACK_ONCE_FORWARD, self.movingToPos.x, go.EASING_LINEAR, MOVE_DURATION, 0, function(self)
+		moveRandomly(self)
+	end)
+	go.animate(".", "position.y", go.PLAYBACK_ONCE_FORWARD, self.movingToPos.y, go.EASING_LINEAR, MOVE_DURATION, 0)
+end
