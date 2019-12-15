@@ -6,13 +6,18 @@ local PLAYER_HEIGHT = 45
 
 local ATTACK_COOLDOWN = 0.3
 
+Timer = require "Scripts.knife.timer"
+
 function init(self)
     msg.post(".", "acquire_input_focus")
 
     self.dt = 0
-    
+
     self.attackBtnPressed = false
     self.attackCoolDown = 0
+
+    self.health = 100
+    self.invulnerable = false
 end
 
 function final(self)
@@ -28,10 +33,22 @@ function update(self, dt)
         self.attackBtnPressed = false
     end
 
-    if (self.attackCoolDown ~= 0) then self.attackCoolDown = math.max(0, self.attackCoolDown - dt) end
+    if (self.attackCoolDown ~= 0) then
+        self.attackCoolDown = math.max(0, self.attackCoolDown - dt)
+    end
+
+    Timer.update(dt)
 end
 
 function on_message(self, message_id, message, sender)
+    if (message_id == hash("collision_response") and not self.invulnerable) then
+        if (message.other_group == hash("enemies")) then
+            self.health = math.max(0, self.health - 30)
+            msg.post("GUI#main", "set_health_bar_fill_width", { health = self.health })
+            
+            triggerInvulnerability(self)
+        end
+    end
 end
 
 function on_input(self, action_id, action)
@@ -64,5 +81,18 @@ function handleMovement(self, action_id, action)
 end
 
 function spawnBullet(self)
-    local bullet_ids = collectionfactory.create("#bullet_factory", go.get_position("bullet_spawn_pos") + go.get_position())
+    local bullet_ids =
+        collectionfactory.create("#bullet_factory", go.get_position("bullet_spawn_pos") + go.get_position())
+end
+
+function triggerInvulnerability(self)
+    --- Player is invulnerable for a set duration of time
+    local INVULNERABLE_DURATION = 2
+    self.invulnerable = true
+
+    go.animate("#body", "tint.w", go.PLAYBACK_ONCE_PINGPONG, 0.2, go.EASING_INOUTSINE, 0.5, 0, function()
+        go.animate("#body", "tint.w", go.PLAYBACK_ONCE_PINGPONG, 0.2, go.EASING_INOUTSINE, 0.5, 0, function()
+            self.invulnerable = false
+        end)
+    end)
 end
