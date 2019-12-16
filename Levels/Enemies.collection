@@ -1,7 +1,7 @@
 name: "default"
-collection_instances {
+instances {
   id: "Enemy"
-  collection: "/Collections/Enemy.collection"
+  prototype: "/Game objects/Enemy.go"
   position {
     x: 0.0
     y: 0.0
@@ -19,32 +19,32 @@ collection_instances {
     z: 1.0
   }
 }
-collection_instances {
+instances {
   id: "Enemy1"
-  collection: "/Collections/Enemy.collection"
-  position {
-    x: -80.0
-    y: 80.0
-    z: 0.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale3 {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-  }
-}
-collection_instances {
-  id: "Enemy2"
-  collection: "/Collections/Enemy.collection"
+  prototype: "/Game objects/Enemy.go"
   position {
     x: 80.0
-    y: 80.0
+    y: 50.0
+    z: 0.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale3 {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+}
+instances {
+  id: "Enemy2"
+  prototype: "/Game objects/Enemy.go"
+  position {
+    x: -80.0
+    y: 50.0
     z: 0.0
   }
   rotation {

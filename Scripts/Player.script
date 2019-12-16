@@ -82,7 +82,7 @@ end
 
 function spawnBullet(self)
     local bullet_ids =
-        collectionfactory.create("#bullet_factory", go.get_position("bullet_spawn_pos") + go.get_position())
+        factory.create("#bullet_factory", go.get_position("bullet_spawn_pos") + go.get_position())
 end
 
 function triggerInvulnerability(self)
