@@ -1,0 +1,48 @@
+CRATE_WIDTH, CRATE_HEIGHT = 20, 20
+CRATE_FALLING_SPEED = 100
+
+ITEM_IDS = { HEALTH_PACK = 1, BULLET_UPGRADE = 2 }
+
+go.property("POWER_UP_1", resource.tile_source("/Assets/Graphics/health-pack.tilesource"))
+
+function init(self)
+	self.itemId = ITEM_IDS.HEALTH_PACK
+	self.isDestroyed = false
+end
+
+function final(self)
+	-- Add finalization code here
+	-- Remove this function if not needed
+end
+
+function update(self, dt)
+	local pos = go.get_position()
+	if (pos.y > -CRATE_HEIGHT / 2) then
+		pos.y = math.max(-CRATE_HEIGHT / 2, pos.y - CRATE_FALLING_SPEED * dt)
+		go.set_position(pos)
+	else
+		go.delete()
+	end
+end
+
+function on_message(self, message_id, message, sender)
+	if (message_id == hash("trigger_response")) then
+		if (message.other_group == hash("bullets")) then
+			go.set("#sprite", "image", self.POWER_UP_1)
+			self.isDestroyed = true
+		end
+		if (message.other_group == hash("player") and self.isDestroyed) then
+			go.delete()
+		end
+	end
+end
+
+function on_input(self, action_id, action)
+	-- Add input-handling code here
+	-- Remove this function if not needed
+end
+
+function on_reload(self)
+	-- Add reload-handling code here
+	-- Remove this function if not needed
+end

@@ -1,6 +1,6 @@
 components {
-  id: "Bullet"
-  component: "/Scripts/Bullet.script"
+  id: "Crate"
+  component: "/Scripts/Crate.script"
   position {
     x: 0.0
     y: 0.0
@@ -21,9 +21,9 @@ embedded_components {
   "mass: 0.0\n"
   "friction: 0.1\n"
   "restitution: 0.5\n"
-  "group: \"bullets\"\n"
-  "mask: \"enemies\"\n"
-  "mask: \"crates\"\n"
+  "group: \"crates\"\n"
+  "mask: \"bullets\"\n"
+  "mask: \"player\"\n"
   "embedded_collision_shape {\n"
   "  shapes {\n"
   "    shape_type: TYPE_BOX\n"
@@ -41,8 +41,8 @@ embedded_components {
   "    index: 0\n"
   "    count: 3\n"
   "  }\n"
-  "  data: 5.0\n"
-  "  data: 5.0\n"
+  "  data: 10.0\n"
+  "  data: 10.0\n"
   "  data: 0.5\n"
   "}\n"
   "linear_damping: 0.0\n"
@@ -64,7 +64,7 @@ embedded_components {
 embedded_components {
   id: "sprite"
   type: "sprite"
-  data: "tile_set: \"/Assets/Graphics/bullet.tilesource\"\n"
+  data: "tile_set: \"/Assets/Graphics/crate-1.tilesource\"\n"
   "default_animation: \"anim\"\n"
   "material: \"/builtins/materials/sprite.material\"\n"
   "blend_mode: BLEND_MODE_ALPHA\n"
