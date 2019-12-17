@@ -2,8 +2,6 @@ BULLET_WIDTH, BULLET_HEIGHT = 10, 10
 BULLET_SPEED = 300
 
 function init(self)
-	-- Add initialization code here
-	-- Remove this function if not needed
 	self.pos = go.get_position()
 end
 

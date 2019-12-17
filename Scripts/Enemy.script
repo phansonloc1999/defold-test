@@ -25,7 +25,7 @@ function on_message(self, message_id, message, sender)
 		if (message.group == hash("bullets")) then
 			self.health = math.max(0, self.health - 30)
 			if (self.health == 0) then
-				if (self.hasCrate) then msg.post("/Crate factory", SPAWN_CRATE, {spawn_position = go.get_position()}) end
+				if (self.hasCrate) then msg.post("/Crate factory", MESSAGE_IDS.SPAWN_CRATE, {spawn_position = go.get_position()}) end
 				go.delete()
 			end
 		end
