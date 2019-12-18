@@ -9,8 +9,6 @@ local ATTACK_COOLDOWN = 0.3
 Timer = require "Scripts.knife.timer"
 
 function init(self)
-    msg.post(".", "acquire_input_focus")
-
     self.dt = 0
 
     self.attackBtnPressed = false
@@ -18,6 +16,10 @@ function init(self)
 
     self.health = 100
     self.invulnerable = false
+
+    self.lives = 3
+
+    spawnPlayer(self)
 end
 
 function final(self)
@@ -44,14 +46,20 @@ function on_message(self, message_id, message, sender)
     if (message_id == hash("collision_response") and not self.invulnerable) then
         if (message.other_group == hash("enemies")) then
             self.health = math.max(0, self.health - 30)
-            msg.post("GUI#main", "set_health_bar_fill_width", { health = self.health })
-            
+                
+            msg.post("GUI#main", MESSAGE_IDS.SET_HEALTH_FILL_WIDTH, { health = self.health })
             triggerInvulnerability(self)
+            if (self.health == 0) then
+                self.lives = math.max(0, self.lives - 1)
+                
+                msg.post("GUI#main", MESSAGE_IDS.LOSING_LIFE, { lostLifeIndex = self.lives + 1})
+                spawnPlayer(self)
+            end
         end
     elseif (message_id == hash("trigger_response")) then
         if (message.other_group == hash("crates")) then
             self.health = math.min(100, self.health + 50)
-            msg.post("GUI#main", "set_health_bar_fill_width", { health = self.health })
+            msg.post("GUI#main", MESSAGE_IDS.SET_HEALTH_FILL_WIDTH, { health = self.health })
         end
     end
 end
@@ -91,13 +99,26 @@ function spawnBullet(self)
 end
 
 function triggerInvulnerability(self)
-    --- Player is invulnerable for a set duration of time
-    local INVULNERABLE_DURATION = 2
     self.invulnerable = true
 
-    go.animate("#body", "tint.w", go.PLAYBACK_ONCE_PINGPONG, 0.2, go.EASING_INOUTSINE, 0.5, 0, function()
-        go.animate("#body", "tint.w", go.PLAYBACK_ONCE_PINGPONG, 0.2, go.EASING_INOUTSINE, 0.5, 0, function()
+    go.animate("#body", "tint.w", go.PLAYBACK_ONCE_PINGPONG, 0.2, go.EASING_INOUTSINE, 1.5, 0, function()
+        go.animate("#body", "tint.w", go.PLAYBACK_ONCE_PINGPONG, 0.2, go.EASING_INOUTSINE, 1.5, 0, function()
             self.invulnerable = false
         end)
+    end)
+end
+
+function spawnPlayer(self)
+    msg.post(".", "release_input_focus")
+    self.health = 100
+
+    msg.post("GUI#main", MESSAGE_IDS.SET_HEALTH_FILL_WIDTH, { health = self.health })
+    triggerInvulnerability(self)
+
+    local pos = go.get_position()
+    pos.x, pos.y = WINDOW_WIDTH / 2, -PLAYER_HEIGHT
+    go.set_position(pos)
+    go.animate(".", "position.y", go.PLAYBACK_ONCE_FORWARD, PLAYER_HEIGHT * 2, go.EASING_LINEAR, 1.5, 0, function(self)
+        msg.post(".", "acquire_input_focus")
     end)
 end
