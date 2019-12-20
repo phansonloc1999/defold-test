@@ -1,6 +1,17 @@
-require "Scripts.Constants"
-Timer = require "Scripts.knife.timer"
+METEOR_WIDTH, METEOR_HEIGHT = 31, 36
+METEOR_FALLING_VELOCITIES = { 
+	small = 170, 
+	medium = 120, 
+	big = 90
+}
+METEOR_DAMAGES = {
+	small = 20,
+	medium = 50,
+	big = 70
+}
 
+go.property("speed", 0)
+go.property("damage", 0)
 function init(self)
 	-- Add initialization code here
 	-- Remove this function if not needed
@@ -12,12 +23,17 @@ function final(self)
 end
 
 function update(self, dt)
-	Timer.update(dt)
+	local pos = go.get_position()
+	if (pos.y > -METEOR_HEIGHT / 2) then
+		pos.y = math.max(-METEOR_HEIGHT / 2, pos.y - self.speed * dt)
+		go.set_position(pos)
+	else
+		go.delete()
+	end
 end
 
 function on_message(self, message_id, message, sender)
-	-- Add message-handling code here
-	-- Remove this function if not needed
+
 end
 
 function on_input(self, action_id, action)

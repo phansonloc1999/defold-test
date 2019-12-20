@@ -8,6 +8,15 @@ local ATTACK_COOLDOWN = 0.3
 
 Timer = require "Scripts.knife.timer"
 
+local function checkHealthForRespawning(self)
+    if (self.health == 0) then
+        self.lives = math.max(0, self.lives - 1)
+
+        msg.post("GUI#main", MESSAGE_IDS.LOSING_LIFE, { lostLifeIndex = self.lives + 1})
+        spawnPlayer(self)
+    end
+end
+
 function init(self)
     self.dt = 0
 
@@ -38,8 +47,6 @@ function update(self, dt)
     if (self.attackCoolDown ~= 0) then
         self.attackCoolDown = math.max(0, self.attackCoolDown - dt)
     end
-
-    Timer.update(dt)
 end
 
 function on_message(self, message_id, message, sender)
@@ -49,17 +56,20 @@ function on_message(self, message_id, message, sender)
                 
             msg.post("GUI#main", MESSAGE_IDS.SET_HEALTH_FILL_WIDTH, { health = self.health })
             triggerInvulnerability(self)
-            if (self.health == 0) then
-                self.lives = math.max(0, self.lives - 1)
-                
-                msg.post("GUI#main", MESSAGE_IDS.LOSING_LIFE, { lostLifeIndex = self.lives + 1})
-                spawnPlayer(self)
-            end
+            checkHealthForRespawning(self)
         end
     elseif (message_id == hash("trigger_response")) then
         if (message.other_group == hash("crates")) then
             self.health = math.min(100, self.health + 50)
             msg.post("GUI#main", MESSAGE_IDS.SET_HEALTH_FILL_WIDTH, { health = self.health })
+        end
+        if (message.other_group == hash("meteors") and not self.invulnerable) then
+            local meteorURL = msg.url("main", message.other_id, "Meteor")
+            self.health = math.max(0, self.health - go.get(meteorURL, "damage"))
+            msg.post("GUI#main", "set_health_bar_fill_width", { health = self.health })
+
+            triggerInvulnerability(self)
+            checkHealthForRespawning(self)
         end
     end
 end
