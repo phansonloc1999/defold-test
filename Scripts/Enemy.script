@@ -4,6 +4,7 @@ ENEMY_WIDTH, ENEMY_HEIGHT = 27, 25
 ENEMY_HEALTH = 100
 
 go.property("hasCrate", false)
+go.property("hasGem", false)
 function init(self)
 	self.health = ENEMY_HEALTH
 	self.movingToPos = nil
@@ -26,6 +27,9 @@ function on_message(self, message_id, message, sender)
 			self.health = math.max(0, self.health - 30)
 			if (self.health == 0) then
 				if (self.hasCrate) then msg.post("/Crate factory", MESSAGE_IDS.SPAWN_CRATE, {spawn_position = go.get_position()}) end
+				if (self.hasGem) then
+					msg.post("/Gem factory", MESSAGE_IDS.SPAWN_GEM, { spawn_position = go.get_position()})
+				end
 				go.delete()
 			end
 		end

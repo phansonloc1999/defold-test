@@ -1,0 +1,41 @@
+GEM_FALLING_VELOCITY = 80
+
+go.property("score", 10)
+go.property("animTimer", nil)
+function init(self)
+	local id = go.get_id()
+	self.animTimer = Timer.every(2, function()
+		msg.post(id, "PLAY_ANIMATION")
+	end)
+end
+
+function final(self)
+	-- Add finalization code here
+	-- Remove this function if not needed
+end
+
+function update(self, dt)
+	local pos = go.get_position()
+	pos.y = pos.y - GEM_FALLING_VELOCITY * dt 
+	go.set_position(pos)
+end
+
+function on_message(self, message_id, message, sender)
+	if (message_id == hash("PLAY_ANIMATION")) then
+		sprite.play_flipbook("#sprite", "anim")
+	end
+	if (message_id == hash("trigger_response")) then
+		self.animTimer:remove()
+		go.delete()
+	end
+end
+
+function on_input(self, action_id, action)
+	-- Add input-handling code here
+	-- Remove this function if not needed
+end
+
+function on_reload(self)
+	-- Add reload-handling code here
+	-- Remove this function if not needed
+end

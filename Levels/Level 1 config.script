@@ -1,5 +1,6 @@
 function init(self)
 	go.set("Enemy#Enemy", "hasCrate", true)
+	go.set("Enemy1#Enemy", "hasGem", true)
 end
 
 function final(self)

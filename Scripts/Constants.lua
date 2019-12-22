@@ -4,7 +4,8 @@
 -- in any script using the functions.
 MESSAGE_IDS = {
 	SPAWN_CRATE = "spawn_crate", SET_HEALTH_FILL_WIDTH = "set_health_bar_fill_width",
-	LOSING_LIFE = "losing_life"
+	LOSING_LIFE = "losing_life", UPDATE_SCORE = "update_score",
+	SPAWN_GEM = "spawn_gem"
 }
 
 COLLISION_OBJ_GROUPS = { BULLETS = "bullets", PLAYER = "player", ENEMIES = "enemies", CRATES = "crates"}
