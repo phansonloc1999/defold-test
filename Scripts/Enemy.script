@@ -5,12 +5,13 @@ ENEMY_HEALTH = 100
 
 go.property("hasCrate", false)
 go.property("hasGem", false)
+go.property("crateItemId", 0)
 function init(self)
 	self.health = ENEMY_HEALTH
 	self.movingToPos = nil
 	self.hasCrate = false
 
-	moveRandomly(self)
+	-- moveRandomly(self)
 end
 
 function final(self)
@@ -26,7 +27,7 @@ function on_message(self, message_id, message, sender)
 		if (message.group == hash("bullets")) then
 			self.health = math.max(0, self.health - 30)
 			if (self.health == 0) then
-				if (self.hasCrate) then msg.post("/Crate factory", MESSAGE_IDS.SPAWN_CRATE, {spawn_position = go.get_position()}) end
+				if (self.hasCrate) then msg.post("/Crate factory", MESSAGE_IDS.SPAWN_CRATE, {spawn_position = go.get_position(), item_id = self.crateItemId}) end
 				if (self.hasGem) then
 					msg.post("/Gem factory", MESSAGE_IDS.SPAWN_GEM, { spawn_position = go.get_position()})
 				end

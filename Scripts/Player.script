@@ -3,8 +3,7 @@ WINDOW_WIDTH, WINDOW_HEIGHT = 640, 480
 local PLAYER_SPEED = 200
 local PLAYER_WIDTH = 46
 local PLAYER_HEIGHT = 45
-
-local ATTACK_COOLDOWN = 0.3
+PLAYER_BULLET_TYPE = nil
 
 Timer = require "Scripts.knife.timer"
 
@@ -28,8 +27,10 @@ function init(self)
     self.invulnerable = false
 
     self.lives = 3
-
+    
     spawnPlayer(self)
+
+    PLAYER_BULLET_TYPE = BULLET_TYPES.SMALL
 end
 
 function final(self)
@@ -61,8 +62,14 @@ function on_message(self, message_id, message, sender)
         end
     elseif (message_id == hash("trigger_response")) then
         if (message.other_group == hash("crates")) then
-            self.health = math.min(100, self.health + 50)
-            msg.post("GUI#main", MESSAGE_IDS.SET_HEALTH_FILL_WIDTH, { health = self.health })
+            local itemId = go.get(msg.url("main", message.other_id, "Crate"), "itemId")
+            if (itemId == ITEM_IDS.HEALTH_PACK) then
+                self.health = math.min(100, self.health + 50)
+                msg.post("GUI#main", MESSAGE_IDS.SET_HEALTH_FILL_WIDTH, { health = self.health })
+            end
+            if (itemId == ITEM_IDS.WEAPON_UPGRADE) then
+                PLAYER_BULLET_TYPE = BULLET_TYPES.MEDIUM
+            end
         end
         if (message.other_group == hash("meteors") and not self.invulnerable) then
             local meteorURL = msg.url("main", message.other_id, "Meteor")
@@ -84,7 +91,7 @@ function on_input(self, action_id, action)
     handleMovement(self, action_id, action)
 
     if (action_id == hash("ATTACK") and self.attackCoolDown == 0) then
-        self.attackCoolDown = ATTACK_COOLDOWN
+        self.attackCoolDown = PLAYER_BULLET_TYPE.ATTACK_COOLDOWN
         self.attackBtnPressed = true
     end
 end

@@ -1,6 +1,9 @@
 function init(self)
 	go.set("Enemy#Enemy", "hasCrate", true)
+	go.set("Enemy#Enemy", "crateItemId", ITEM_IDS.HEALTH_PACK)
 	go.set("Enemy1#Enemy", "hasGem", true)
+	go.set("Enemy2#Enemy", "hasCrate", true)
+	go.set("Enemy2#Enemy", "crateItemId", ITEM_IDS.WEAPON_UPGRADE)
 end
 
 function final(self)

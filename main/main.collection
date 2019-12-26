@@ -64,7 +64,7 @@ collection_instances {
   collection: "/Levels/Level 1 enemies.collection"
   position {
     x: 320.0
-    y: 300.0
+    y: 354.0
     z: 0.1
   }
   rotation {

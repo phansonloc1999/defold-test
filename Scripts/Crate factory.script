@@ -13,7 +13,7 @@ end
 
 function on_message(self, message_id, message, sender)
 	if (message_id == hash(MESSAGE_IDS.SPAWN_CRATE)) then
-		factory.create("#factory", message.spawn_position)
+		factory.create("#factory", message.spawn_position, nil, { itemId = message.item_id })
 	end
 end
 

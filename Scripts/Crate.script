@@ -1,12 +1,13 @@
 CRATE_WIDTH, CRATE_HEIGHT = 20, 20
 CRATE_FALLING_SPEED = 100
 
-ITEM_IDS = { HEALTH_PACK = 1, BULLET_UPGRADE = 2 }
+ITEM_IDS = { HEALTH_PACK = 1, WEAPON_UPGRADE = 2 }
 
-go.property("POWER_UP_1", resource.tile_source("/Assets/Graphics/health-pack.tilesource"))
+go.property("HEALTH_PACK", resource.tile_source("/Assets/Graphics/health-pack.tilesource"))
+go.property("WEAPON_UPGRADE", resource.tile_source("/Assets/Graphics/weapon-upgrade.tilesource"))
+go.property("itemId", 0)
 
 function init(self)
-	self.itemId = ITEM_IDS.HEALTH_PACK
 	self.isDestroyed = false
 end
 
@@ -28,7 +29,12 @@ end
 function on_message(self, message_id, message, sender)
 	if (message_id == hash("trigger_response")) then
 		if (message.other_group == hash("bullets")) then
-			go.set("#sprite", "image", self.POWER_UP_1)
+			if (self.itemId == ITEM_IDS.HEALTH_PACK) then
+				go.set("#sprite", "image", self.HEALTH_PACK)
+			end
+			if (self.itemId == ITEM_IDS.WEAPON_UPGRADE) then
+				go.set("#sprite", "image", self.WEAPON_UPGRADE)
+			end
 			self.isDestroyed = true
 		end
 		if (message.other_group == hash("player") and self.isDestroyed) then

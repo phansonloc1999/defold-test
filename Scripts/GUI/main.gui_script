@@ -1,5 +1,11 @@
 function init(self)
-
+	self.announcerEnabled = false
+	gui.set_enabled(gui.get_node("Level announcer"), self.announcerEnabled)
+	
+	local announcer = Timer.every(0.5, function()
+		msg.post("GUI#main", MESSAGE_IDS.LEVEL_ANNOUNCING, {level = 1})
+	end)
+	announcer:limit(6)
 end
 
 function final(self)
@@ -25,6 +31,12 @@ function on_message(self, message_id, message, sender)
 	if (message_id == hash(MESSAGE_IDS.UPDATE_SCORE)) then
 		local text = "Score: "..message.score
 		gui.set_text(gui.get_node("Score"), text)
+	end
+	if (message_id == hash(MESSAGE_IDS.LEVEL_ANNOUNCING)) then
+		self.announcerEnabled = not self.announcerEnabled
+		local node = gui.get_node("Level announcer")
+		gui.set_text(node, "Level "..message.level.."!")
+		gui.set_enabled(node, self.announcerEnabled)
 	end
 end
 
