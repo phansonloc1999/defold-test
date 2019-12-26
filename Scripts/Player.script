@@ -117,8 +117,8 @@ function handleMovement(self, action_id, action)
 end
 
 function spawnBullet(self)
-    local bullet_id =
-        factory.create("#bullet_factory", go.get_position("bullet_spawn_pos") + go.get_position())
+    bullet_id =
+    factory.create("#bullet_factory", go.get_position("bullet_spawn_pos") + go.get_position(), nil, { damage = PLAYER_BULLET_TYPE.DAMAGE })
 end
 
 function triggerInvulnerability(self)

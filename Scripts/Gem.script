@@ -1,7 +1,7 @@
 GEM_FALLING_VELOCITY = 80
 
 go.property("score", 10)
-go.property("animTimer", nil)
+go.property("animTimer", 0)
 function init(self)
 	local id = go.get_id()
 	self.animTimer = Timer.every(2, function()
