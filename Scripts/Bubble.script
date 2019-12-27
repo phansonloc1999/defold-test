@@ -1,0 +1,42 @@
+local BUBBLE_WIDTH, BUBBLE_HEIGHT = 13, 13
+local ENEMY_BULLET_SPEED = 100
+
+go.property("damage", 30)
+function init(self)
+	-- Add initialization code here
+	-- Remove this function if not needed
+end
+
+function final(self)
+	-- Add finalization code here
+	-- Remove this function if not needed
+end
+
+function update(self, dt)
+	local pos = go.get_position()
+	if (pos.y > -BUBBLE_HEIGHT / 2) then
+		pos.y = pos.y - ENEMY_BULLET_SPEED * dt
+		go.set_position(pos)
+	else
+		go.delete()
+	end
+end
+
+function on_message(self, message_id, message, sender)
+	if (message_id == hash("collision_response")) then
+		if (message.other_group == hash("player") and not go.get(msg.url("/Player#Player"), "invulnerable")) then
+			msg.post(msg.url("/Player#Player"), MESSAGE_IDS.BUBBLE_HIT, { damage = self.damage })
+			go.delete()
+		end
+	end
+end
+
+function on_input(self, action_id, action)
+	-- Add input-handling code here
+	-- Remove this function if not needed
+end
+
+function on_reload(self)
+	-- Add reload-handling code here
+	-- Remove this function if not needed
+end

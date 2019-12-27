@@ -17,6 +17,7 @@ local function checkHealthForRespawning(self)
 end
 
 go.property("score", 0)
+go.property("invulnerable", false)
 function init(self)
     self.dt = 0
 
@@ -55,7 +56,7 @@ function on_message(self, message_id, message, sender)
     if (message_id == hash("collision_response") and not self.invulnerable) then
         if (message.other_group == hash("enemies")) then
             self.health = math.max(0, self.health - 30)
-                
+
             msg.post("GUI#main", MESSAGE_IDS.SET_HEALTH_FILL_WIDTH, { health = self.health })
             triggerInvulnerability(self)
             checkHealthForRespawning(self)
@@ -84,6 +85,14 @@ function on_message(self, message_id, message, sender)
             self.score = self.score + go.get(gemURL, "score")
             msg.post("GUI#main", MESSAGE_IDS.UPDATE_SCORE, { score = self.score })
         end
+    end
+
+    if (message_id == hash(MESSAGE_IDS.BUBBLE_HIT)) then
+        self.health = math.max(0, self.health - message.damage)
+
+        msg.post("GUI#main", MESSAGE_IDS.SET_HEALTH_FILL_WIDTH, { health = self.health })
+        triggerInvulnerability(self)
+        checkHealthForRespawning(self)
     end
 end
 

@@ -2,6 +2,7 @@ math.randomseed(os.time())
 
 ENEMY_WIDTH, ENEMY_HEIGHT = 27, 25
 ENEMY_HEALTH = 100
+ENEMY_ATTACK_COOLDOWN = 4
 
 ENEMY_MOVEMENTS = { RANDOM = 1, CHASING = 2 }
 
@@ -14,6 +15,11 @@ function init(self)
 	self.hasCrate = false
 	
 	moveRandomly(self)
+
+	self.pos = go.get_position()
+	self.attackTimer = Timer.every(ENEMY_ATTACK_COOLDOWN, function()
+		factory.create("/Enemies/Enemy bullet factory#factory", self.pos)
+	end)
 end
 
 function final(self)
@@ -22,6 +28,7 @@ function final(self)
 end
 
 function update(self, dt)
+	self.pos = go.get_position()
 end
 
 function on_message(self, message_id, message, sender)
@@ -35,6 +42,7 @@ function on_message(self, message_id, message, sender)
 					msg.post("/Gem factory", MESSAGE_IDS.SPAWN_GEM, { spawn_position = go.get_position() })
 				end
 				go.delete()
+				self.attackTimer:remove()
 			end
 		end
 	end

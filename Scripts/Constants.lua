@@ -5,7 +5,8 @@
 MESSAGE_IDS = {
 	SPAWN_CRATE = "spawn_crate", SET_HEALTH_FILL_WIDTH = "set_health_bar_fill_width",
 	LOSING_LIFE = "losing_life", UPDATE_SCORE = "update_score",
-	SPAWN_GEM = "spawn_gem", LEVEL_ANNOUNCING = "level_announcing"
+	SPAWN_GEM = "spawn_gem", LEVEL_ANNOUNCING = "level_announcing",
+	BUBBLE_HIT = "bubble_hit"
 }
 
 COLLISION_OBJ_GROUPS = { BULLETS = "bullets", PLAYER = "player", ENEMIES = "enemies", CRATES = "crates"}
