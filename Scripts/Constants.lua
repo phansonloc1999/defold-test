@@ -10,3 +10,5 @@ MESSAGE_IDS = {
 }
 
 COLLISION_OBJ_GROUPS = { BULLETS = "bullets", PLAYER = "player", ENEMIES = "enemies", CRATES = "crates"}
+
+WINDOW_WIDTH, WINDOW_HEIGHT = 640, 480

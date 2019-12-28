@@ -1,5 +1,5 @@
 local BUBBLE_WIDTH, BUBBLE_HEIGHT = 13, 13
-local ENEMY_BULLET_SPEED = 100
+local ENEMY_BULLET_SPEED = 85
 
 go.property("damage", 30)
 function init(self)
