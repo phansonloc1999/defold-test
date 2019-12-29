@@ -28,7 +28,7 @@ function init(self)
 	self.movingToPos = nil
 	self.hasCrate = false
 	
-	-- moveRandomly(self)
+	moveRandomly(self)
 
 	self.pos = go.get_position()
 end

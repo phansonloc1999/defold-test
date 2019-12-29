@@ -9,6 +9,7 @@ local function moveRandomly()
 end
 
 go.property("health", 0)
+go.property("damage", 70)
 function init(self)
 	self.attackTimer = Timer.every(ENEMY_ATTACK_COOLDOWN, function()
 		factory.create("/Enemy bullet factory#factory", self.pos)

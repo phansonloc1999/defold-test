@@ -61,6 +61,21 @@ function on_message(self, message_id, message, sender)
             triggerInvulnerability(self)
             checkHealthForRespawning(self)
         end
+        if (message.other_group == hash("enemy bosses")) then
+            self.health = math.max(0, self.health - go.get(msg.url("main", message.other_id, "Enemy boss"), "damage"))
+
+            msg.post("GUI#main", MESSAGE_IDS.SET_HEALTH_FILL_WIDTH, { health = self.health })
+            triggerInvulnerability(self)
+            checkHealthForRespawning(self)
+        end
+        if (message.other_group == hash("meteors")) then
+            local meteorURL = msg.url("main", message.other_id, "Meteor")
+            self.health = math.max(0, self.health - go.get(meteorURL, "damage"))
+            msg.post("GUI#main", "set_health_bar_fill_width", { health = self.health })
+
+            triggerInvulnerability(self)
+            checkHealthForRespawning(self)
+        end
     elseif (message_id == hash("trigger_response")) then
         if (message.other_group == hash("crates")) then
             local itemId = go.get(msg.url("main", message.other_id, "Crate"), "itemId")
@@ -71,14 +86,6 @@ function on_message(self, message_id, message, sender)
             if (itemId == ITEM_IDS.WEAPON_UPGRADE) then
                 PLAYER_BULLET_TYPE = BULLET_TYPES.MEDIUM
             end
-        end
-        if (message.other_group == hash("meteors") and not self.invulnerable) then
-            local meteorURL = msg.url("main", message.other_id, "Meteor")
-            self.health = math.max(0, self.health - go.get(meteorURL, "damage"))
-            msg.post("GUI#main", "set_health_bar_fill_width", { health = self.health })
-
-            triggerInvulnerability(self)
-            checkHealthForRespawning(self)
         end
         if (message.other_group == hash("gems")) then
             local gemURL = msg.url("main", message.other_id, "Gem")

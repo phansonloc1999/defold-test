@@ -10,7 +10,8 @@ MESSAGE_IDS = {
     SPAWN_GEM = "spawn_gem",
     NOTIFY_LEVEL_ANNOUNCER = "notify_level_announcer",
     INIT_LEVEL_ANNOUNCING = "init_level_announcing",
-    BUBBLE_HIT = "bubble_hit"
+    BUBBLE_HIT = "bubble_hit",
+    ENEMY_BOSS_HIT = "enemy_boss_hit"
 }
 
 COLLISION_OBJ_GROUPS = {BULLETS = "bullets", PLAYER = "player", ENEMIES = "enemies", CRATES = "crates"}

@@ -112,6 +112,7 @@ embedded_instances {
   "mask: \\\"meteors\\\"\\n"
   "mask: \\\"gems\\\"\\n"
   "mask: \\\"bubbles\\\"\\n"
+  "mask: \\\"enemy bosses\\\"\\n"
   "embedded_collision_shape {\\n"
   "  shapes {\\n"
   "    shape_type: TYPE_BOX\\n"

@@ -43,7 +43,7 @@ embedded_components {
   "restitution: 0.5\n"
   "group: \"enemy bosses\"\n"
   "mask: \"bullets\"\n"
-  "mask: \"players\"\n"
+  "mask: \"player\"\n"
   "embedded_collision_shape {\n"
   "  shapes {\n"
   "    shape_type: TYPE_SPHERE\n"
