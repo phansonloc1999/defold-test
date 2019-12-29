@@ -8,7 +8,7 @@ local function getEnemyCount(enemyIds)
 	return count
 end
 
-go.property("currentLevel", 1)
+go.property("currentLevel", 0)
 function init(self)
 end
 
