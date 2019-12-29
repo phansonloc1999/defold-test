@@ -1,0 +1,53 @@
+ENEMY_BOSS_HEALTH = 250
+ENEMY_BOSS_WIDTH, ENEMY_BOSS_HEIGHT = 56, 51
+
+local function moveRandomly()
+	local randomY = math.random(ENEMY_BOSS_WIDTH / 2, WINDOW_WIDTH - ENEMY_BOSS_WIDTH / 2)
+	go.animate(".", "position.x", go.PLAYBACK_ONCE_FORWARD, randomY, go.EASING_LINEAR, 2, 0, function()
+		moveRandomly()
+	end)
+end
+
+go.property("health", 0)
+function init(self)
+	self.attackTimer = Timer.every(ENEMY_ATTACK_COOLDOWN, function()
+		factory.create("/Enemy bullet factory#factory", self.pos)
+	end)
+	self.health = ENEMY_BOSS_HEALTH
+
+	go.animate(".", "position.y", go.PLAYBACK_ONCE_FORWARD, 420, go.EASING_LINEAR, 2, 0, function()
+		moveRandomly()
+	end)
+end
+
+function final(self)
+	-- Add finalization code here
+	-- Remove this function if not needed
+end
+
+function update(self, dt)
+	self.pos = go.get_position()
+end
+
+function on_message(self, message_id, message, sender)
+	if (message_id == hash("trigger_response")) then
+		if (message.group == hash("bullets")) then
+			local damage = go.get(msg.url("main", message.other_id, "Bullet"), "damage")
+			self.health = math.max(0, self.health - damage)
+			if (self.health == 0) then
+				go.delete()
+				self.attackTimer:remove()
+			end
+		end
+	end
+end
+
+function on_input(self, action_id, action)
+	-- Add input-handling code here
+	-- Remove this function if not needed
+end
+
+function on_reload(self)
+	-- Add reload-handling code here
+	-- Remove this function if not needed
+end

@@ -38,7 +38,7 @@ end
 
 function on_message(self, message_id, message, sender)
 	if (message_id == hash("trigger_response")) then
-		if (message.other_group == hash("enemies")) then
+		if (message.other_group == hash("enemies") or message.other_group == hash("enemy bosses")) then
 			go.delete()
 		end
 	end

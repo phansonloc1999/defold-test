@@ -1,10 +1,30 @@
 name: "default"
 instances {
+  id: "Enemy boss"
+  prototype: "/Game objects/Enemy boss.go"
+  position {
+    x: 320.0
+    y: 550.0
+    z: 0.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale3 {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+}
+instances {
   id: "Enemy"
   prototype: "/Game objects/Enemy.go"
   position {
-    x: 0.0
-    y: -50.0
+    x: 480.0
+    y: 382.0
     z: 0.0
   }
   rotation {
@@ -23,48 +43,8 @@ instances {
   id: "Enemy1"
   prototype: "/Game objects/Enemy.go"
   position {
-    x: 80.0
-    y: 0.0
-    z: 0.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale3 {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-  }
-}
-instances {
-  id: "Enemy2"
-  prototype: "/Game objects/Enemy.go"
-  position {
-    x: -80.0
-    y: 0.0
-    z: 0.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale3 {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-  }
-}
-instances {
-  id: "Enemy3"
-  prototype: "/Game objects/Enemy.go"
-  position {
-    x: 0.0
-    y: 50.0
+    x: 160.0
+    y: 382.0
     z: 0.0
   }
   rotation {

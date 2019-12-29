@@ -6,6 +6,20 @@ ENEMY_ATTACK_COOLDOWN = 4
 
 ENEMY_MOVEMENTS = { RANDOM = 1, CHASING = 2 }
 
+local function getRandomPos()
+	return { x = math.random(ENEMY_WIDTH / 2, WINDOW_WIDTH - ENEMY_WIDTH / 2), y = math.random(ENEMY_HEIGHT / 2, WINDOW_HEIGHT - ENEMY_HEIGHT / 2) }
+end
+
+
+local MOVE_DURATION = 2
+local function moveRandomly(self)
+	self.movingToPos = getRandomPos()
+	go.animate(".", "position.x", go.PLAYBACK_ONCE_FORWARD, self.movingToPos.x, go.EASING_LINEAR, MOVE_DURATION, 0, function(self)
+		moveRandomly(self)
+	end)
+	go.animate(".", "position.y", go.PLAYBACK_ONCE_FORWARD, self.movingToPos.y, go.EASING_LINEAR, MOVE_DURATION, 0)
+end
+
 go.property("hasCrate", false)
 go.property("hasGem", false)
 go.property("crateItemId", 0)
@@ -14,12 +28,9 @@ function init(self)
 	self.movingToPos = nil
 	self.hasCrate = false
 	
-	moveRandomly(self)
+	-- moveRandomly(self)
 
 	self.pos = go.get_position()
-	self.attackTimer = Timer.every(ENEMY_ATTACK_COOLDOWN, function()
-		factory.create("/Enemies/Enemy bullet factory#factory", self.pos)
-	end)
 end
 
 function final(self)
@@ -42,7 +53,7 @@ function on_message(self, message_id, message, sender)
 					msg.post("/Gem factory", MESSAGE_IDS.SPAWN_GEM, { spawn_position = go.get_position() })
 				end
 				go.delete()
-				self.attackTimer:remove()
+				ENEMY_COUNT = ENEMY_COUNT - 1
 			end
 		end
 	end
@@ -56,18 +67,4 @@ end
 function on_reload(self)
 	-- Add reload-handling code here
 	-- Remove this function if not needed
-end
-
-function getRandomPos()
-	return { x = math.random(ENEMY_WIDTH / 2, WINDOW_WIDTH - ENEMY_WIDTH / 2), y = math.random(ENEMY_HEIGHT / 2, WINDOW_HEIGHT - ENEMY_HEIGHT / 2) }
-end
-
-
-local MOVE_DURATION = 2
-function moveRandomly(self)
-	self.movingToPos = getRandomPos()
-	go.animate(".", "position.x", go.PLAYBACK_ONCE_FORWARD, self.movingToPos.x, go.EASING_LINEAR, MOVE_DURATION, 0, function(self)
-		moveRandomly(self)
-	end)
-	go.animate(".", "position.y", go.PLAYBACK_ONCE_FORWARD, self.movingToPos.y, go.EASING_LINEAR, MOVE_DURATION, 0)
 end
