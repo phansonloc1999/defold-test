@@ -1,5 +1,6 @@
 ENEMY_BOSS_HEALTH = 250
 ENEMY_BOSS_WIDTH, ENEMY_BOSS_HEIGHT = 56, 51
+ENEMY_BOSS_ATTACK_COOLDOWN = 1
 
 local function moveRandomly()
 	local randomY = math.random(ENEMY_BOSS_WIDTH / 2, WINDOW_WIDTH - ENEMY_BOSS_WIDTH / 2)
@@ -11,7 +12,7 @@ end
 go.property("health", 0)
 go.property("damage", 70)
 function init(self)
-	self.attackTimer = Timer.every(ENEMY_ATTACK_COOLDOWN, function()
+	self.attackTimer = Timer.every(ENEMY_BOSS_ATTACK_COOLDOWN, function()
 		factory.create("/Enemy bullet factory#factory", self.pos)
 	end)
 	self.health = ENEMY_BOSS_HEALTH
