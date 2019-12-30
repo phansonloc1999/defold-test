@@ -20,9 +20,27 @@ local function moveRandomly(self)
 	go.animate(".", "position.y", go.PLAYBACK_ONCE_FORWARD, self.movingToPos.y, go.EASING_LINEAR, MOVE_DURATION, 0)
 end
 
+local function flickersWhenDamaged(self)
+	local id = go.get_id()
+	self.invulnerableTimer = Timer.every(0.1, function(self)
+		if (self.isEnabled) then
+			msg.post(id, "disable")
+			self.isEnabled = false
+		else
+			msg.post(id, "enable")
+			self.isEnabled = true
+		end
+	end):finish(function() 
+		self.invulnerable = false 
+	end)
+	self.invulnerableTimer:limit(5)
+end
+
 go.property("hasCrate", false)
 go.property("hasGem", false)
 go.property("crateItemId", 0)
+go.property("invulnerable", false)
+go.property("isEnabled", true)
 function init(self)
 	self.health = ENEMY_HEALTH
 	self.movingToPos = nil
@@ -47,14 +65,22 @@ function on_message(self, message_id, message, sender)
 		if (message.group == hash("bullets")) then
 			local damage = go.get(msg.url("main", message.other_id, "Bullet"), "damage")
 			self.health = math.max(0, self.health - damage)
+
+			if (not self.invulnerable) then
+				self.invulnerable = true
+				flickersWhenDamaged(self)
+			end
+
 			if (self.health == 0) then
 				if (self.hasCrate) then msg.post("/Crate factory", MESSAGE_IDS.SPAWN_CRATE, {spawn_position = go.get_position(), item_id = self.crateItemId}) end
 				if (self.hasGem) then
 					msg.post("/Gem factory", MESSAGE_IDS.SPAWN_GEM, { spawn_position = go.get_position() })
 				end
 				go.delete()
+				self.invulnerableTimer:remove()
+
 				ENEMY_COUNT = ENEMY_COUNT - 1
-			end
+			end							
 		end
 	end
 end
