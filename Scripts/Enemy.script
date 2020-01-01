@@ -4,8 +4,6 @@ ENEMY_WIDTH, ENEMY_HEIGHT = 27, 25
 ENEMY_HEALTH = 100
 ENEMY_ATTACK_COOLDOWN = 4
 
-ENEMY_MOVEMENTS = { RANDOM = 1, CHASING = 2 }
-
 local moveRandomly
 local chasePlayer
 
@@ -15,7 +13,7 @@ end
 
 local function move(self)
 	local result = math.random(0, 10)
-	if (result <= 3) then
+	if (result <= 2) and (go.get("/Player#Player", "invulnerable") == false) then
 		chasePlayer(self)
 	else
 		moveRandomly(self)
@@ -31,7 +29,7 @@ moveRandomly = function(self)
 	go.animate(".", "position.y", go.PLAYBACK_ONCE_FORWARD, self.movingToPos.y, go.EASING_LINEAR, MOVE_DURATION, 0)
 end
 
-local CHASING_DURATION = 2
+local CHASING_DURATION = 3
 chasePlayer = function(self)
 	local playerPos = go.get("/Player", "position")
 	go.animate(".", "position.x", go.PLAYBACK_ONCE_FORWARD, playerPos.x, go.EASING_LINEAR, CHASING_DURATION, 0, function(self)
