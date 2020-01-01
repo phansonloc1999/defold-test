@@ -6,18 +6,38 @@ ENEMY_ATTACK_COOLDOWN = 4
 
 ENEMY_MOVEMENTS = { RANDOM = 1, CHASING = 2 }
 
+local moveRandomly
+local chasePlayer
+
 local function getRandomPos()
 	return { x = math.random(ENEMY_WIDTH / 2, WINDOW_WIDTH - ENEMY_WIDTH / 2), y = math.random(ENEMY_HEIGHT / 2, WINDOW_HEIGHT - ENEMY_HEIGHT / 2) }
 end
 
+local function move(self)
+	local result = math.random(0, 10)
+	if (result <= 3) then
+		chasePlayer(self)
+	else
+		moveRandomly(self)
+	end
+end
 
 local MOVE_DURATION = 2
-local function moveRandomly(self)
+moveRandomly = function(self)
 	self.movingToPos = getRandomPos()
 	go.animate(".", "position.x", go.PLAYBACK_ONCE_FORWARD, self.movingToPos.x, go.EASING_LINEAR, MOVE_DURATION, 0, function(self)
-		moveRandomly(self)
+		move(self)
 	end)
 	go.animate(".", "position.y", go.PLAYBACK_ONCE_FORWARD, self.movingToPos.y, go.EASING_LINEAR, MOVE_DURATION, 0)
+end
+
+local CHASING_DURATION = 2
+chasePlayer = function(self)
+	local playerPos = go.get("/Player", "position")
+	go.animate(".", "position.x", go.PLAYBACK_ONCE_FORWARD, playerPos.x, go.EASING_LINEAR, CHASING_DURATION, 0, function(self)
+		move(self)
+	end)
+	go.animate(".", "position.y", go.PLAYBACK_ONCE_FORWARD, playerPos.y, go.EASING_LINEAR, CHASING_DURATION)
 end
 
 local function flickersWhenDamaged(self)
@@ -45,10 +65,10 @@ function init(self)
 	self.health = ENEMY_HEALTH
 	self.movingToPos = nil
 	self.hasCrate = false
-	
-	moveRandomly(self)
 
 	self.pos = go.get_position()
+
+	move(self)
 end
 
 function final(self)
