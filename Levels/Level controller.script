@@ -8,8 +8,26 @@ local function getEnemyCount(enemyIds)
 	return count
 end
 
+local function anotherEnemyChasePlayer(self, deadId)
+	local setAnotherToChase = false
+	for key, valueId in pairs(self.enemyIds) do
+		if (deadId == valueId) then
+			self.enemyIds[key] = nil -- remove dead enemy from ids
+		else
+			if (not setAnotherToChase) then	
+				local url = msg.url("main", valueId, "Enemy")
+				go.set(url, "onlyChase", true)
+				go.set(url, "chaseFinished", true)
+				go.set(url, "onlyMoveRandom", false)
+				setAnotherToChase = true
+			end
+		end
+	end
+end
+	
 go.property("currentLevel", 0)
 function init(self)
+	self.enemyIds = {}
 end
 
 function final(self)
@@ -22,8 +40,8 @@ function update(self, dt)
 		self.currentLevel = self.currentLevel + 1
 		
 		if (self.currentLevel == 1) then
-			local enemy_ids = collectionfactory.create("Enemy collection factories#level1collectionfactory", vmath.vector3(320, 354, 0.1))
-			ENEMY_COUNT = getEnemyCount(enemy_ids)
+			self.enemyIds = collectionfactory.create("Enemy collection factories#level1collectionfactory", vmath.vector3(320, 354, 0.1))
+			ENEMY_COUNT = getEnemyCount(self.enemyIds)
 
 			go.set("/collection0/Enemy#Enemy", "hasGem", true)
 			go.set("/collection0/Enemy1#Enemy", "hasCrate", true)
@@ -37,8 +55,8 @@ function update(self, dt)
 		
 		if (self.currentLevel == 2) then 
 
-			local enemy_ids = collectionfactory.create("Enemy collection factories#level2collectionfactory", vmath.vector3(0, 0, 0.1))
-			ENEMY_COUNT = getEnemyCount(enemy_ids)
+			self.enemyIds = collectionfactory.create("Enemy collection factories#level2collectionfactory", vmath.vector3(0, 0, 0.1))
+			ENEMY_COUNT = getEnemyCount(self.enemyIds)
 			
 			msg.post("GUI#main", MESSAGE_IDS.INIT_LEVEL_ANNOUNCING, {level = 2})
 		end
@@ -46,6 +64,9 @@ function update(self, dt)
 end
 
 function on_message(self, message_id, message, sender)
-	-- Add message-handling code here
-	-- Remove this function if not needed
+	if (message_id == hash(MESSAGE_IDS.ON_AN_ENEMY_DEATH)) then
+		ENEMY_COUNT = ENEMY_COUNT - 1
+
+		anotherEnemyChasePlayer(self, message.dead_id)
+	end
 end

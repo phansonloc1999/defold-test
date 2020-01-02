@@ -178,8 +178,8 @@ embedded_instances {
   "\"\n"
   "  position {\n"
   "    x: -1.0\n"
-  "    y: -36.5\n"
-  "    z: 0.1\n"
+  "    y: -32.5\n"
+  "    z: -0.1\n"
   "  }\n"
   "  rotation {\n"
   "    x: 1.0\n"
@@ -428,26 +428,6 @@ embedded_instances {
   "  }\n"
   "}\n"
   ""
-  position {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale3 {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-  }
-}
-embedded_instances {
-  id: "go"
-  data: ""
   position {
     x: 0.0
     y: 0.0

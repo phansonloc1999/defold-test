@@ -145,6 +145,11 @@ function triggerInvulnerability(self)
             self.invulnerable = false
         end)
     end)
+
+    go.animate("#ship_muffler_effect", "tint.w", go.PLAYBACK_ONCE_PINGPONG, 0.2, go.EASING_INOUTSINE, 1.5, 0, function()
+        go.animate("#ship_muffler_effect", "tint.w", go.PLAYBACK_ONCE_PINGPONG, 0.2, go.EASING_INOUTSINE, 1.5, 0, function()
+        end)
+    end)
 end
 
 function spawnPlayer(self)

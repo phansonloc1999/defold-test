@@ -7,7 +7,8 @@ MESSAGE_IDS = {
     NOTIFY_LEVEL_ANNOUNCER = "notify_level_announcer",
     INIT_LEVEL_ANNOUNCING = "init_level_announcing",
     BUBBLE_HIT = "bubble_hit",
-    ENEMY_BOSS_HIT = "enemy_boss_hit"
+    ENEMY_BOSS_HIT = "enemy_boss_hit",
+    ON_AN_ENEMY_DEATH = "on_an_enemy_death"
 }
 
 COLLISION_OBJ_GROUPS = {BULLETS = "bullets", PLAYER = "player", ENEMIES = "enemies", CRATES = "crates"}

@@ -11,29 +11,21 @@ local function getRandomPos()
 	return { x = math.random(ENEMY_WIDTH / 2, WINDOW_WIDTH - ENEMY_WIDTH / 2), y = math.random(ENEMY_HEIGHT / 2, WINDOW_HEIGHT - ENEMY_HEIGHT / 2) }
 end
 
-local function move(self)
-	local result = math.random(0, 10)
-	if (result <= 2) and (go.get("/Player#Player", "invulnerable") == false) then
-		chasePlayer(self)
-	else
-		moveRandomly(self)
-	end
-end
-
 local MOVE_DURATION = 2
 moveRandomly = function(self)
 	self.movingToPos = getRandomPos()
 	go.animate(".", "position.x", go.PLAYBACK_ONCE_FORWARD, self.movingToPos.x, go.EASING_LINEAR, MOVE_DURATION, 0, function(self)
-		move(self)
+		moveRandomly(self)
 	end)
 	go.animate(".", "position.y", go.PLAYBACK_ONCE_FORWARD, self.movingToPos.y, go.EASING_LINEAR, MOVE_DURATION, 0)
 end
 
 local CHASING_DURATION = 3
 chasePlayer = function(self)
+	self.chaseFinished = false
 	local playerPos = go.get("/Player", "position")
 	go.animate(".", "position.x", go.PLAYBACK_ONCE_FORWARD, playerPos.x, go.EASING_LINEAR, CHASING_DURATION, 0, function(self)
-		move(self)
+		self.chaseFinished = true
 	end)
 	go.animate(".", "position.y", go.PLAYBACK_ONCE_FORWARD, playerPos.y, go.EASING_LINEAR, CHASING_DURATION)
 end
@@ -59,6 +51,10 @@ go.property("hasGem", false)
 go.property("crateItemId", 0)
 go.property("invulnerable", false)
 go.property("isEnabled", true)
+go.property("onlyChase", false)
+go.property("onlyMoveRandom", false)
+go.property("chaseFinished", true)
+
 function init(self)
 	self.health = ENEMY_HEALTH
 	self.movingToPos = nil
@@ -66,7 +62,11 @@ function init(self)
 
 	self.pos = go.get_position()
 
-	move(self)
+	if (self.onlyMoveRandom) then
+		moveRandomly(self)
+	elseif (self.onlyChase) then
+		self.chaseFinished = true
+	end
 end
 
 function final(self)
@@ -76,6 +76,12 @@ end
 
 function update(self, dt)
 	self.pos = go.get_position()
+
+	if (self.onlyChase and go.get("/Player#Player", "invulnerable") == false) then
+		if (self.chaseFinished) then
+			chasePlayer(self)
+		end
+	end
 end
 
 function on_message(self, message_id, message, sender)
@@ -96,8 +102,8 @@ function on_message(self, message_id, message, sender)
 				end
 				go.delete()
 				self.invulnerableTimer:remove()
-
-				ENEMY_COUNT = ENEMY_COUNT - 1
+				
+				msg.post("/Enemy collection factories#Level controller", MESSAGE_IDS.ON_AN_ENEMY_DEATH, { dead_id = go.get_id() })
 			end							
 		end
 	end
