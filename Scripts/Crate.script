@@ -7,8 +7,8 @@ go.property("HEALTH_PACK", resource.tile_source("/Assets/Graphics/health-pack.ti
 go.property("WEAPON_UPGRADE", resource.tile_source("/Assets/Graphics/weapon-upgrade.tilesource"))
 go.property("itemId", 0)
 
+go.property("isDestroyed", false)
 function init(self)
-	self.isDestroyed = false
 end
 
 function final(self)

@@ -77,14 +77,16 @@ function on_message(self, message_id, message, sender)
             checkHealthForRespawning(self)
         end
     elseif (message_id == hash("trigger_response")) then
-        if (message.other_group == hash("crates")) then
+        if (message.other_group == hash("crates") and go.get(msg.url("main", message.other_id, "Crate"), "isDestroyed")) then
             local itemId = go.get(msg.url("main", message.other_id, "Crate"), "itemId")
             if (itemId == ITEM_IDS.HEALTH_PACK) then
                 self.health = math.min(100, self.health + 50)
                 msg.post("GUI#main", MESSAGE_IDS.SET_HEALTH_FILL_WIDTH, { health = self.health })
+                sound.play("#consume_crate_item")
             end
             if (itemId == ITEM_IDS.WEAPON_UPGRADE) then
                 PLAYER_BULLET_TYPE = BULLET_TYPES.MEDIUM
+                sound.play("#consume_crate_item")
             end
         end
         if (message.other_group == hash("gems")) then
@@ -109,6 +111,7 @@ function on_input(self, action_id, action)
     if (action_id == hash("ATTACK") and self.attackCoolDown == 0) then
         self.attackCoolDown = PLAYER_BULLET_TYPE.ATTACK_COOLDOWN
         self.attackBtnPressed = true
+        sound.play("#player_attack")
     end
 end
 
