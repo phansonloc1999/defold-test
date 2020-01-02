@@ -11,7 +11,7 @@ end
 local function anotherEnemyChasePlayer(self, deadId)
 	local setAnotherToChase = false
 	for key, valueId in pairs(self.enemyIds) do
-		if (deadId == valueId) then
+		if (hash_to_hex(deadId) == hash_to_hex(valueId)) then
 			self.enemyIds[key] = nil -- remove dead enemy from ids
 		else
 			if (not setAnotherToChase) then	
