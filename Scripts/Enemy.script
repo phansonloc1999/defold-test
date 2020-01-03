@@ -62,11 +62,11 @@ function init(self)
 
 	self.pos = go.get_position()
 
-	-- if (self.onlyMoveRandom) then
-	-- 	moveRandomly(self)
-	-- elseif (self.onlyChase) then
-	-- 	self.chaseFinished = true
-	-- end
+	if (self.onlyMoveRandom) then
+		moveRandomly(self)
+	elseif (self.onlyChase) then
+		self.chaseFinished = true
+	end
 end
 
 function final(self)
