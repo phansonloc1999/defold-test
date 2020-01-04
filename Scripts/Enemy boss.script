@@ -39,6 +39,7 @@ function on_message(self, message_id, message, sender)
 			local damage = go.get(msg.url("main", message.other_id, "Bullet"), "damage")
 			self.health = math.max(0, self.health - damage)
 			if (self.health == 0) then
+				ENEMY_COUNT = ENEMY_COUNT - 1
 				go.delete()
 				self.attackTimer:remove()
 			end
