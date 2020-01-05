@@ -64,6 +64,11 @@ instances {
   component_properties {
     id: "Enemy"
     properties {
+      id: "hasGem"
+      value: "true"
+      type: PROPERTY_TYPE_BOOLEAN
+    }
+    properties {
       id: "onlyMoveRandom"
       value: "true"
       type: PROPERTY_TYPE_BOOLEAN
