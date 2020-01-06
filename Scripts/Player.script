@@ -7,17 +7,37 @@ PLAYER_BULLET_TYPE = nil
 
 Timer = require "Scripts.knife.timer"
 
+local function spawnPlayer(self)
+    msg.post(".", "release_input_focus")
+    self.health = 100
+
+    msg.post("GUI#main", MESSAGE_IDS.SET_HEALTH_FILL_WIDTH, { health = self.health })
+    triggerInvulnerability(self)
+
+    local pos = go.get_position()
+    pos.x, pos.y = WINDOW_WIDTH / 2, -PLAYER_HEIGHT
+    go.set_position(pos)
+    go.animate(".", "position.y", go.PLAYBACK_ONCE_FORWARD, PLAYER_HEIGHT * 2, go.EASING_LINEAR, 1.5, 0, function(self)
+        msg.post(".", "acquire_input_focus")
+    end)
+end
+
 local function checkHealthForRespawning(self)
     if (self.health == 0) then
         self.lives = math.max(0, self.lives - 1)
-
         msg.post("GUI#main", MESSAGE_IDS.LOSING_LIFE, { lostLifeIndex = self.lives + 1})
+        --- Play death sound
+        if (not self.firstSpawn) then
+            sound.play("#death")
+        else self.firstSpawn = false end
+        
         spawnPlayer(self)
     end
 end
 
 go.property("score", 0)
 go.property("invulnerable", false)
+go.property("firstSpawn", true)
 function init(self)
     self.dt = 0
 
@@ -93,6 +113,8 @@ function on_message(self, message_id, message, sender)
             local gemURL = msg.url("main", message.other_id, "Gem")
             self.score = self.score + go.get(gemURL, "score")
             msg.post("GUI#main", MESSAGE_IDS.UPDATE_SCORE, { score = self.score })
+
+            sound.play("#gem")
         end
     end
 
@@ -152,20 +174,5 @@ function triggerInvulnerability(self)
     go.animate("#ship_muffler_effect", "tint.w", go.PLAYBACK_ONCE_PINGPONG, 0.2, go.EASING_INOUTSINE, 1.5, 0, function()
         go.animate("#ship_muffler_effect", "tint.w", go.PLAYBACK_ONCE_PINGPONG, 0.2, go.EASING_INOUTSINE, 1.5, 0, function()
         end)
-    end)
-end
-
-function spawnPlayer(self)
-    msg.post(".", "release_input_focus")
-    self.health = 100
-
-    msg.post("GUI#main", MESSAGE_IDS.SET_HEALTH_FILL_WIDTH, { health = self.health })
-    triggerInvulnerability(self)
-
-    local pos = go.get_position()
-    pos.x, pos.y = WINDOW_WIDTH / 2, -PLAYER_HEIGHT
-    go.set_position(pos)
-    go.animate(".", "position.y", go.PLAYBACK_ONCE_FORWARD, PLAYER_HEIGHT * 2, go.EASING_LINEAR, 1.5, 0, function(self)
-        msg.post(".", "acquire_input_focus")
     end)
 end
