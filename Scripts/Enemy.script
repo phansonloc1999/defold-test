@@ -58,7 +58,6 @@ go.property("chaseFinished", true)
 function init(self)
 	self.health = ENEMY_HEALTH
 	self.movingToPos = nil
-	self.hasCrate = false
 
 	self.pos = go.get_position()
 
@@ -70,8 +69,7 @@ function init(self)
 end
 
 function final(self)
-	-- Add finalization code here
-	-- Remove this function if not needed
+	self.invulnerableTimer:remove()
 end
 
 function update(self, dt)
@@ -104,7 +102,7 @@ function on_message(self, message_id, message, sender)
 				self.invulnerableTimer:remove()
 				
 				msg.post("/Enemy collection factories#Level controller", MESSAGE_IDS.ON_AN_ENEMY_DEATH, { dead_id = go.get_id() })
-			end							
+			end
 		end
 	end
 end

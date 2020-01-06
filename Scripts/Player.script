@@ -5,7 +5,20 @@ local PLAYER_WIDTH = 46
 local PLAYER_HEIGHT = 45
 PLAYER_BULLET_TYPE = nil
 
-Timer = require "Scripts.knife.timer"
+local function triggerInvulnerability(self)
+    self.invulnerable = true
+
+    go.animate("#body", "tint.w", go.PLAYBACK_ONCE_PINGPONG, 0.2, go.EASING_INOUTSINE, 1.5, 0, function()
+        go.animate("#body", "tint.w", go.PLAYBACK_ONCE_PINGPONG, 0.2, go.EASING_INOUTSINE, 1.5, 0, function()
+            self.invulnerable = false
+        end)
+    end)
+
+    go.animate("#ship_muffler_effect", "tint.w", go.PLAYBACK_ONCE_PINGPONG, 0.2, go.EASING_INOUTSINE, 1.5, 0, function()
+        go.animate("#ship_muffler_effect", "tint.w", go.PLAYBACK_ONCE_PINGPONG, 0.2, go.EASING_INOUTSINE, 1.5, 0, function()
+        end)
+    end)
+end
 
 local function spawnPlayer(self)
     msg.post(".", "release_input_focus")
@@ -33,6 +46,26 @@ local function checkHealthForRespawning(self)
         
         spawnPlayer(self)
     end
+end
+
+local function handleMovement(self, action_id, action)
+    local pos = go.get_position()
+    if (action_id == hash("MOVE_UP")) then
+        pos.y = math.min(WINDOW_HEIGHT - PLAYER_HEIGHT / 2, pos.y + PLAYER_SPEED * self.dt)
+    elseif (action_id == hash("MOVE_DOWN")) then
+        pos.y = math.max(PLAYER_HEIGHT / 2, pos.y - PLAYER_SPEED * self.dt)
+    end
+    if (action_id == hash("MOVE_LEFT")) then
+        pos.x = math.max(PLAYER_WIDTH / 2, pos.x - PLAYER_SPEED * self.dt)
+    elseif (action_id == hash("MOVE_RIGHT")) then
+        pos.x = math.min(WINDOW_WIDTH - PLAYER_WIDTH / 2, pos.x + PLAYER_SPEED * self.dt)
+    end
+    go.set_position(pos)
+end
+
+local function spawnBullet(self)
+    bullet_id =
+    factory.create("#bullet_factory", go.get_position("bullet_spawn_pos") + go.get_position(), nil, { damage = PLAYER_BULLET_TYPE.DAMAGE })
 end
 
 go.property("score", 0)
@@ -140,39 +173,4 @@ end
 function on_reload(self)
     -- Add reload-handling code here
     -- Remove this function if not needed
-end
-
-function handleMovement(self, action_id, action)
-    local pos = go.get_position()
-    if (action_id == hash("MOVE_UP")) then
-        pos.y = math.min(WINDOW_HEIGHT - PLAYER_HEIGHT / 2, pos.y + PLAYER_SPEED * self.dt)
-    elseif (action_id == hash("MOVE_DOWN")) then
-        pos.y = math.max(PLAYER_HEIGHT / 2, pos.y - PLAYER_SPEED * self.dt)
-    end
-    if (action_id == hash("MOVE_LEFT")) then
-        pos.x = math.max(PLAYER_WIDTH / 2, pos.x - PLAYER_SPEED * self.dt)
-    elseif (action_id == hash("MOVE_RIGHT")) then
-        pos.x = math.min(WINDOW_WIDTH - PLAYER_WIDTH / 2, pos.x + PLAYER_SPEED * self.dt)
-    end
-    go.set_position(pos)
-end
-
-function spawnBullet(self)
-    bullet_id =
-    factory.create("#bullet_factory", go.get_position("bullet_spawn_pos") + go.get_position(), nil, { damage = PLAYER_BULLET_TYPE.DAMAGE })
-end
-
-function triggerInvulnerability(self)
-    self.invulnerable = true
-
-    go.animate("#body", "tint.w", go.PLAYBACK_ONCE_PINGPONG, 0.2, go.EASING_INOUTSINE, 1.5, 0, function()
-        go.animate("#body", "tint.w", go.PLAYBACK_ONCE_PINGPONG, 0.2, go.EASING_INOUTSINE, 1.5, 0, function()
-            self.invulnerable = false
-        end)
-    end)
-
-    go.animate("#ship_muffler_effect", "tint.w", go.PLAYBACK_ONCE_PINGPONG, 0.2, go.EASING_INOUTSINE, 1.5, 0, function()
-        go.animate("#ship_muffler_effect", "tint.w", go.PLAYBACK_ONCE_PINGPONG, 0.2, go.EASING_INOUTSINE, 1.5, 0, function()
-        end)
-    end)
 end

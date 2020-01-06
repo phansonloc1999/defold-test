@@ -54,13 +54,6 @@ function update(self, dt)
 			self.enemyIds = collectionfactory.create("Enemy collection factories#level1collectionfactory", vmath.vector3(320, 354, 0.1))
 			ENEMY_COUNT = getEnemyCount(self.enemyIds)
 
-			go.set("/collection0/Enemy#Enemy", "hasGem", true)
-			go.set("/collection0/Enemy1#Enemy", "hasCrate", true)
-			go.set("/collection0/Enemy1#Enemy", "crateItemId", ITEM_IDS.HEALTH_PACK)
-			go.set("/collection0/Enemy2#Enemy", "hasGem", true)
-			go.set("/collection0/Enemy3#Enemy", "hasCrate", true)
-			go.set("/collection0/Enemy3#Enemy", "crateItemId", ITEM_IDS.WEAPON_UPGRADE)
-
 			msg.post("GUI#main", MESSAGE_IDS.INIT_LEVEL_ANNOUNCING, {level = 1})
 		end
 		
