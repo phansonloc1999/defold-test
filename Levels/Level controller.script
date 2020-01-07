@@ -8,31 +8,22 @@ local function getEnemyCount(enemyIds)
 	return count
 end
 
-local function anotherEnemyChasePlayer(self, deadId)
-	local setAnotherToChase = false
-
-	--- Remove dead enemy
+local function removeDeadEnemy(self, deadId)
 	for key, valueId in pairs(self.enemyIds) do
 		if (hash_to_hex(deadId) == hash_to_hex(valueId)) then
-			local url = msg.url("main", deadId, "Enemy")
-			if (go.get(url, "onlyChase")) then
-				setAnotherToChase = true
-			end
-
-			self.enemyIds[key] = nil -- remove dead enemy from ids
+			self.enemyIds[key] = nil
 			break
 		end
 	end
+end
 
-	-- Find and set another enemy to chase player
+local function anotherEnemyChasePlayer(self, deadId)
 	for key, valueId in pairs(self.enemyIds) do
-		if (setAnotherToChase) then	
-			local url = msg.url("main", valueId, "Enemy")
-			go.set(url, "onlyChase", true)
-			go.set(url, "chaseFinished", true)
-			go.set(url, "onlyMoveRandom", false)
-			setAnotherToChase = false
-		end
+		local url = msg.url("main", valueId, "Enemy")
+		go.set(url, "onlyChase", true)
+		go.set(url, "chaseFinished", true)
+		go.set(url, "onlyMoveRandom", false)
+		break
 	end
 end
 	
@@ -71,6 +62,17 @@ function on_message(self, message_id, message, sender)
 	if (message_id == hash(MESSAGE_IDS.ON_AN_ENEMY_DEATH)) then
 		ENEMY_COUNT = ENEMY_COUNT - 1
 
-		anotherEnemyChasePlayer(self, message.dead_id)
+		removeDeadEnemy(self, message.dead_id)
+		if (message.only_chase) then
+			anotherEnemyChasePlayer(self, message.dead_id)
+		end
+	end
+	if (message_id == hash(MESSAGE_IDS.REMOVE_BOSS_FROM_ENEMY_IDS)) then
+		for key, valueId in pairs(self.enemyIds) do
+			if (valueId == message.boss_id) then
+				self.enemyIds[key] = nil
+				break
+			end
+		end
 	end
 end

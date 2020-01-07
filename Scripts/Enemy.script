@@ -69,7 +69,9 @@ function init(self)
 end
 
 function final(self)
-	self.invulnerableTimer:remove()
+	if (self.invulnerableTimer) then
+		self.invulnerableTimer:remove()
+	end
 end
 
 function update(self, dt)
@@ -101,7 +103,7 @@ function on_message(self, message_id, message, sender)
 				go.delete()
 				self.invulnerableTimer:remove()
 				
-				msg.post("/Enemy collection factories#Level controller", MESSAGE_IDS.ON_AN_ENEMY_DEATH, { dead_id = go.get_id() })
+				msg.post("/Enemy collection factories#Level controller", MESSAGE_IDS.ON_AN_ENEMY_DEATH, { dead_id = go.get_id(), only_chase = self.onlyChase })
 			end
 		end
 	end

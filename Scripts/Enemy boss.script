@@ -9,6 +9,22 @@ local function moveRandomly()
 	end)
 end
 
+local function flickersWhenDamaged(self)
+	local id = go.get_id()
+	self.invulnerableTimer = Timer.every(0.1, function(self)
+		if (self.isEnabled) then
+			msg.post(id, "disable")
+			self.isEnabled = false
+		else
+			msg.post(id, "enable")
+			self.isEnabled = true
+		end
+	end):finish(function() 
+		self.invulnerable = false 
+	end)
+	self.invulnerableTimer:limit(5)
+end
+
 go.property("health", 0)
 go.property("damage", 70)
 function init(self)
@@ -22,11 +38,12 @@ function init(self)
 			factory.create("/Enemy bullet factory#factory", self.pos)
 		end)
 	end)
+	
+	msg.post("/Enemy collection factories#Level controller", MESSAGE_IDS.REMOVE_BOSS_FROM_ENEMY_IDS, { boss_id = go.get_id() })
 end
 
 function final(self)
-	-- Add finalization code here
-	-- Remove this function if not needed
+	if (self.invulnerableTimer) then self.invulnerableTimer:remove() end
 end
 
 function update(self, dt)
@@ -38,6 +55,12 @@ function on_message(self, message_id, message, sender)
 		if (message.group == hash("bullets")) then
 			local damage = go.get(msg.url("main", message.other_id, "Bullet"), "damage")
 			self.health = math.max(0, self.health - damage)
+
+			if (not self.invulnerable) then
+				self.invulnerable = true
+				flickersWhenDamaged(self)
+			end
+			
 			if (self.health == 0) then
 				ENEMY_COUNT = ENEMY_COUNT - 1
 				go.delete()
