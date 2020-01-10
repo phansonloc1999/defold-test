@@ -101,9 +101,8 @@ function on_message(self, message_id, message, sender)
 					msg.post("/Gem factory", MESSAGE_IDS.SPAWN_GEM, { spawn_position = go.get_position() })
 				end
 				go.delete()
-				self.invulnerableTimer:remove()
 				
-				msg.post("/Enemy collection factories#Level controller", MESSAGE_IDS.ON_AN_ENEMY_DEATH, { dead_id = go.get_id(), only_chase = self.onlyChase })
+				msg.post("/Enemy collection factories#Level controller", MESSAGE_IDS.ON_AN_ENEMY_DEATH, { dead_id = go.get_id() })
 			end
 		end
 	end

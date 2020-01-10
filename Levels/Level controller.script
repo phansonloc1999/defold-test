@@ -8,22 +8,31 @@ local function getEnemyCount(enemyIds)
 	return count
 end
 
-local function removeDeadEnemy(self, deadId)
+local function anotherEnemyChasePlayer(self, deadId)
+	local setAnotherToChase = false
+
+	--- Remove dead enemy
 	for key, valueId in pairs(self.enemyIds) do
 		if (hash_to_hex(deadId) == hash_to_hex(valueId)) then
-			self.enemyIds[key] = nil
+			local url = msg.url("main", deadId, "Enemy")
+			if (go.get(url, "onlyChase")) then
+				setAnotherToChase = true
+			end
+
+			self.enemyIds[key] = nil -- remove dead enemy from ids
 			break
 		end
 	end
-end
 
-local function anotherEnemyChasePlayer(self, deadId)
+	-- Find and set another enemy to chase player
 	for key, valueId in pairs(self.enemyIds) do
-		local url = msg.url("main", valueId, "Enemy")
-		go.set(url, "onlyChase", true)
-		go.set(url, "chaseFinished", true)
-		go.set(url, "onlyMoveRandom", false)
-		break
+		if (setAnotherToChase) then	
+			local url = msg.url("main", valueId, "Enemy")
+			go.set(url, "onlyChase", true)
+			go.set(url, "chaseFinished", true)
+			go.set(url, "onlyMoveRandom", false)
+			setAnotherToChase = false
+		end
 	end
 end
 	
@@ -42,7 +51,7 @@ function update(self, dt)
 		self.currentLevel = self.currentLevel + 1
 		
 		if (self.currentLevel == 1) then
-			self.enemyIds = collectionfactory.create("Enemy collection factories#level1collectionfactory", vmath.vector3(320, 354, 0.1))
+			self.enemyIds = collectionfactory.create("Enemy collection factories#level1collectionfactory")
 			ENEMY_COUNT = getEnemyCount(self.enemyIds)
 
 			msg.post("GUI#main", MESSAGE_IDS.INIT_LEVEL_ANNOUNCING, {level = 1})
@@ -50,7 +59,7 @@ function update(self, dt)
 		
 		if (self.currentLevel == 2) then 
 
-			self.enemyIds = collectionfactory.create("Enemy collection factories#level2collectionfactory", vmath.vector3(0, 0, 0.1))
+			self.enemyIds = collectionfactory.create("Enemy collection factories#level2collectionfactory")
 			ENEMY_COUNT = getEnemyCount(self.enemyIds)
 			
 			msg.post("GUI#main", MESSAGE_IDS.INIT_LEVEL_ANNOUNCING, {level = 2})
@@ -62,17 +71,6 @@ function on_message(self, message_id, message, sender)
 	if (message_id == hash(MESSAGE_IDS.ON_AN_ENEMY_DEATH)) then
 		ENEMY_COUNT = ENEMY_COUNT - 1
 
-		removeDeadEnemy(self, message.dead_id)
-		if (message.only_chase) then
-			anotherEnemyChasePlayer(self, message.dead_id)
-		end
-	end
-	if (message_id == hash(MESSAGE_IDS.REMOVE_BOSS_FROM_ENEMY_IDS)) then
-		for key, valueId in pairs(self.enemyIds) do
-			if (valueId == message.boss_id) then
-				self.enemyIds[key] = nil
-				break
-			end
-		end
+		anotherEnemyChasePlayer(self, message.dead_id)
 	end
 end

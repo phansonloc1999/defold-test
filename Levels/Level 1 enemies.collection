@@ -3,9 +3,9 @@ instances {
   id: "Enemy"
   prototype: "/Game objects/Enemy.go"
   position {
-    x: 0.0
-    y: -50.0
-    z: 0.0
+    x: 320.0
+    y: 309.0
+    z: 0.1
   }
   rotation {
     x: 0.0
@@ -31,9 +31,9 @@ instances {
   id: "Enemy1"
   prototype: "/Game objects/Enemy.go"
   position {
-    x: 80.0
-    y: 0.0
-    z: 0.0
+    x: 400.0
+    y: 359.0
+    z: 0.1
   }
   rotation {
     x: 0.0
@@ -64,9 +64,9 @@ instances {
   id: "Enemy2"
   prototype: "/Game objects/Enemy.go"
   position {
-    x: -80.0
-    y: 0.0
-    z: 0.0
+    x: 240.0
+    y: 359.0
+    z: 0.1
   }
   rotation {
     x: 0.0
@@ -97,9 +97,9 @@ instances {
   id: "Enemy3"
   prototype: "/Game objects/Enemy.go"
   position {
-    x: 0.0
-    y: 50.0
-    z: 0.0
+    x: 320.0
+    y: 409.0
+    z: 0.1
   }
   rotation {
     x: 0.0
@@ -109,16 +109,6 @@ instances {
   }
   component_properties {
     id: "Enemy"
-    properties {
-      id: "hasCrate"
-      value: "true"
-      type: PROPERTY_TYPE_BOOLEAN
-    }
-    properties {
-      id: "crateItemId"
-      value: "2.0"
-      type: PROPERTY_TYPE_NUMBER
-    }
     properties {
       id: "onlyMoveRandom"
       value: "true"
