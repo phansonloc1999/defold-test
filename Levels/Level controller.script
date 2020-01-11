@@ -47,9 +47,7 @@ function final(self)
 end
 
 function update(self, dt)
-	if (ENEMY_COUNT == 0) then
-		self.currentLevel = self.currentLevel + 1
-		
+	if (ENEMY_COUNT == 0) then		
 		if (self.currentLevel == 1) then
 			self.enemyIds = collectionfactory.create("Enemy collection factories#level1collectionfactory")
 			ENEMY_COUNT = getEnemyCount(self.enemyIds)
@@ -64,6 +62,15 @@ function update(self, dt)
 			
 			msg.post("GUI#main", MESSAGE_IDS.INIT_LEVEL_ANNOUNCING, {level = 2})
 		end
+
+		if (self.currentLevel == 3) then 
+
+			self.enemyIds = collectionfactory.create("Enemy collection factories#level3collectionfactory")
+			ENEMY_COUNT = getEnemyCount(self.enemyIds)
+
+			msg.post("GUI#main", MESSAGE_IDS.INIT_LEVEL_ANNOUNCING, {level = 2})
+		end
+		self.currentLevel = self.currentLevel + 1
 	end
 end
 
