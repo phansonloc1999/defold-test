@@ -4,7 +4,7 @@ instances {
   prototype: "/Game objects/Enemy boss.go"
   position {
     x: 320.0
-    y: 550.0
+    y: 420.0
     z: 0.1
   }
   rotation {
