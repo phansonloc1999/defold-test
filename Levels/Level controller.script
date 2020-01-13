@@ -1,3 +1,4 @@
+ENEMY_COUNTS = { 4, 6, 6 }
 ENEMY_COUNT = 0
 
 local function getEnemyCount(enemyIds)
@@ -25,9 +26,15 @@ local function anotherEnemyChasePlayer(self, deadId)
 	end
 
 	-- Find and set another enemy to chase player
-	for key, valueId in pairs(self.enemyIds) do
-		if (setAnotherToChase) then	
-			local url = msg.url("main", valueId, "Enemy")
+	local enemyScriptUrl
+	for key, enemyId in pairs(self.enemyIds) do
+		enemyScriptUrl = msg.url()
+		enemyScriptUrl.socket = "main"
+		enemyScriptUrl.path = enemyId
+		enemyScriptUrl.fragment = "Enemy"
+		
+		if (setAnotherToChase) and (not go.get(enemyScriptUrl, "isInGroup")) then	
+			local url = msg.url("main", enemyId, "Enemy")
 			go.set(url, "onlyChase", true)
 			go.set(url, "chaseFinished", true)
 			go.set(url, "onlyMoveRandom", false)
@@ -47,29 +54,26 @@ function final(self)
 end
 
 function update(self, dt)
-	if (ENEMY_COUNT == 0) then		
+	if (ENEMY_COUNT == 0) then				
 		if (self.currentLevel == 1) then
 			self.enemyIds = collectionfactory.create("Enemy collection factories#level1collectionfactory")
-			ENEMY_COUNT = getEnemyCount(self.enemyIds)
 
 			msg.post("GUI#main", MESSAGE_IDS.INIT_LEVEL_ANNOUNCING, {level = 1})
 		end
 		
 		if (self.currentLevel == 2) then 
-
 			self.enemyIds = collectionfactory.create("Enemy collection factories#level2collectionfactory")
-			ENEMY_COUNT = getEnemyCount(self.enemyIds)
 			
 			msg.post("GUI#main", MESSAGE_IDS.INIT_LEVEL_ANNOUNCING, {level = 2})
 		end
 
-		if (self.currentLevel == 3) then 
-
+		if (self.currentLevel == 3) then
 			self.enemyIds = collectionfactory.create("Enemy collection factories#level3collectionfactory")
-			ENEMY_COUNT = getEnemyCount(self.enemyIds)
 
-			msg.post("GUI#main", MESSAGE_IDS.INIT_LEVEL_ANNOUNCING, {level = 2})
+			msg.post("GUI#main", MESSAGE_IDS.INIT_LEVEL_ANNOUNCING, {level = 3})
 		end
+		ENEMY_COUNT = ENEMY_COUNTS[self.currentLevel]
+		
 		self.currentLevel = self.currentLevel + 1
 	end
 end

@@ -1,0 +1,76 @@
+local function getRandomPos(self)
+	return vmath.vector3( math.random(0, WINDOW_WIDTH), math.random(0, WINDOW_HEIGHT), go.get_position().z)
+end
+
+local function moveRandomly(self)
+	self.reachRandomDestination = false
+	
+	self.randomPos = getRandomPos(self)
+	
+	go.animate(".", "position.x", go.PLAYBACK_ONCE_FORWARD, self.randomPos.x, go.EASING_LINEAR, 5, 0, function(self)
+		self.reachRandomDestination = true
+		moveRandomly(self)
+	end)
+	go.animate(".", "position.y", go.PLAYBACK_ONCE_FORWARD, self.randomPos.y, go.EASING_LINEAR, 5)
+end
+
+local function vectorFloor(vector)
+	local result = vmath.vector3(vector)
+	result.x = math.floor(result.x)
+	result.y = math.floor(result.y)
+	result.z = 0.1
+	return result
+end
+
+go.property("reachRandomDestination", true)
+go.property("randomPos", 0)
+function init(self)
+	self.enemyIds = {}
+end
+
+function final(self)
+	-- Add finalization code here
+	-- Remove this function if not needed
+end
+
+function update(self, dt)
+	if (self.reachRandomDestination) then
+		moveRandomly(self)
+	else
+		-- Update enemy positions in group
+		local newPos, enemyScriptUrl
+		for key, enemyId in pairs(self.enemyIds) do
+			enemyScriptUrl = msg.url()
+			enemyScriptUrl.socket = "main"
+			enemyScriptUrl.path = enemyId
+			enemyScriptUrl.fragment = "Enemy"
+			
+			newPos = go.get_position() + go.get(enemyScriptUrl, "offsetFromGroupCenter")
+			go.set_position(vectorFloor(newPos), enemyId)
+		end
+	end
+end
+
+function on_message(self, message_id, message, sender)
+	if (message_id == hash(MESSAGE_IDS.CREATED_IN_GROUP)) then
+		table.insert(self.enemyIds, message.enemy_id)
+	end
+	if (message_id == hash(MESSAGE_IDS.ON_GROUP_ENEMY_DEATH)) then
+		for key, enemyId in pairs(self.enemyIds) do
+			if (hash_to_hex(enemyId) == hash_to_hex(message.dead_id)) then
+				self.enemyIds[key] = nil
+				break
+			end
+		end
+	end
+end
+
+function on_input(self, action_id, action)
+	-- Add input-handling code here
+	-- Remove this function if not needed
+end
+
+function on_reload(self)
+	-- Add reload-handling code here
+	-- Remove this function if not needed
+end

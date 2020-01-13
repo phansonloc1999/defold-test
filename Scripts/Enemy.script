@@ -54,6 +54,8 @@ go.property("isEnabled", true)
 go.property("onlyChase", false)
 go.property("onlyMoveRandom", false)
 go.property("chaseFinished", true)
+go.property("isInGroup", false)
+go.property("offsetFromGroupCenter", vmath.vector3())
 
 function init(self)
 	self.health = ENEMY_HEALTH
@@ -61,10 +63,15 @@ function init(self)
 
 	self.pos = go.get_position()
 
-	if (self.onlyMoveRandom) then
-		moveRandomly(self)
-	elseif (self.onlyChase) then
-		self.chaseFinished = true
+	if (not self.isInGroup) then
+		if (self.onlyMoveRandom) then
+			moveRandomly(self)
+		elseif (self.onlyChase) then
+			self.chaseFinished = true
+		end
+	else
+		self.offsetFromGroupCenter = go.get_position() - go.get_position("Enemy group controller")
+		msg.post("Enemy group controller#Enemy group controller", MESSAGE_IDS.CREATED_IN_GROUP, { enemy_id = go.get_id() })
 	end
 end
 
@@ -101,7 +108,10 @@ function on_message(self, message_id, message, sender)
 					msg.post("/Gem factory", MESSAGE_IDS.SPAWN_GEM, { spawn_position = go.get_position() })
 				end
 				go.delete()
-				
+
+				if (self.isInGroup) then
+					msg.post("Enemy group controller#Enemy group controller", MESSAGE_IDS.ON_GROUP_ENEMY_DEATH, { dead_id = go.get_id() })
+				end
 				msg.post("/Enemy collection factories#Level controller", MESSAGE_IDS.ON_AN_ENEMY_DEATH, { dead_id = go.get_id() })
 			end
 		end

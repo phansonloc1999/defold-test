@@ -1,30 +1,10 @@
 name: "default"
 instances {
-  id: "Enemy boss"
-  prototype: "/Game objects/Enemy boss.go"
-  position {
-    x: 320.0
-    y: 420.0
-    z: 0.1
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale3 {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-  }
-}
-instances {
   id: "Enemy"
   prototype: "/Game objects/Enemy.go"
   position {
-    x: 480.0
-    y: 382.0
+    x: 0.0
+    y: 0.0
     z: 0.1
   }
   rotation {
@@ -36,7 +16,7 @@ instances {
   component_properties {
     id: "Enemy"
     properties {
-      id: "onlyChase"
+      id: "isInGroup"
       value: "true"
       type: PROPERTY_TYPE_BOOLEAN
     }
@@ -51,8 +31,8 @@ instances {
   id: "Enemy1"
   prototype: "/Game objects/Enemy.go"
   position {
-    x: 160.0
-    y: 382.0
+    x: 100.0
+    y: 0.0
     z: 0.1
   }
   rotation {
@@ -64,12 +44,7 @@ instances {
   component_properties {
     id: "Enemy"
     properties {
-      id: "hasGem"
-      value: "true"
-      type: PROPERTY_TYPE_BOOLEAN
-    }
-    properties {
-      id: "onlyMoveRandom"
+      id: "isInGroup"
       value: "true"
       type: PROPERTY_TYPE_BOOLEAN
     }
@@ -80,12 +55,40 @@ instances {
     z: 1.0
   }
 }
-collection_instances {
-  id: "Enemy group"
-  collection: "/Collections/Enemy group.collection"
+instances {
+  id: "Enemy2"
+  prototype: "/Game objects/Enemy.go"
   position {
-    x: 320.0
-    y: 315.0
+    x: -100.0
+    y: 0.0
+    z: 0.1
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  component_properties {
+    id: "Enemy"
+    properties {
+      id: "isInGroup"
+      value: "true"
+      type: PROPERTY_TYPE_BOOLEAN
+    }
+  }
+  scale3 {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+}
+instances {
+  id: "Enemy group controller"
+  prototype: "/Game objects/Enemy group controller.go"
+  position {
+    x: 0.0
+    y: 0.0
     z: 0.0
   }
   rotation {
