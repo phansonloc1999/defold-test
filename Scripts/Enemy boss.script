@@ -60,7 +60,8 @@ function on_message(self, message_id, message, sender)
 			end
 			
 			if (self.health == 0) then
-				ENEMY_COUNT = ENEMY_COUNT - 1
+				msg.post("/Enemy collection factories#Level controller", MESSAGE_IDS.ON_ENEMY_BOSS_DEATH, { dead_id = go.get_id() })
+				
 				go.delete()
 				self.attackTimer:remove()
 			end

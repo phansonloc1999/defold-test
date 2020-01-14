@@ -36,6 +36,16 @@ instances {
   component_properties {
     id: "Enemy"
     properties {
+      id: "hasCrate"
+      value: "true"
+      type: PROPERTY_TYPE_BOOLEAN
+    }
+    properties {
+      id: "crateItemId"
+      value: "1.0"
+      type: PROPERTY_TYPE_NUMBER
+    }
+    properties {
       id: "onlyChase"
       value: "true"
       type: PROPERTY_TYPE_BOOLEAN
@@ -82,7 +92,7 @@ instances {
 }
 collection_instances {
   id: "Enemy group"
-  collection: "/Collections/Enemy group.collection"
+  collection: "/Collections/3 Enemy group.collection"
   position {
     x: 320.0
     y: 315.0
@@ -93,6 +103,22 @@ collection_instances {
     y: 0.0
     z: 0.0
     w: 1.0
+  }
+  instance_properties {
+    id: "Enemy2"
+    properties {
+      id: "Enemy"
+      properties {
+        id: "hasGem"
+        value: "true"
+        type: PROPERTY_TYPE_BOOLEAN
+      }
+      properties {
+        id: "isInGroup"
+        value: "true"
+        type: PROPERTY_TYPE_BOOLEAN
+      }
+    }
   }
   scale3 {
     x: 1.0

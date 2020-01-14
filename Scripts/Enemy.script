@@ -63,6 +63,8 @@ function init(self)
 
 	self.pos = go.get_position()
 
+	msg.post("/Enemy collection factories#Level controller", MESSAGE_IDS.ADD_ENEMY_ON_SPAWN, { enemy_id = go.get_id() })
+	
 	if (not self.isInGroup) then
 		if (self.onlyMoveRandom) then
 			moveRandomly(self)
@@ -112,7 +114,7 @@ function on_message(self, message_id, message, sender)
 				if (self.isInGroup) then
 					msg.post("Enemy group controller#Enemy group controller", MESSAGE_IDS.ON_GROUP_ENEMY_DEATH, { dead_id = go.get_id() })
 				end
-				msg.post("/Enemy collection factories#Level controller", MESSAGE_IDS.ON_AN_ENEMY_DEATH, { dead_id = go.get_id() })
+				msg.post("/Enemy collection factories#Level controller", MESSAGE_IDS.ON_ENEMY_DEATH, { dead_id = go.get_id() })
 			end
 		end
 	end

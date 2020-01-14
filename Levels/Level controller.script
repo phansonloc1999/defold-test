@@ -1,13 +1,5 @@
-ENEMY_COUNTS = { 4, 6, 6 }
-ENEMY_COUNT = 0
-
-local function getEnemyCount(enemyIds)
-	count = 0
-	for key, value in pairs(enemyIds) do
-		count = count + 1
-	end
-	return count
-end
+ALL_ENEMY_COUNTS = { 4, 6, 6 }
+ALL_ENEMY_COUNT = 0
 
 local function anotherEnemyChasePlayer(self, deadId)
 	local setAnotherToChase = false
@@ -32,7 +24,7 @@ local function anotherEnemyChasePlayer(self, deadId)
 		enemyScriptUrl.socket = "main"
 		enemyScriptUrl.path = enemyId
 		enemyScriptUrl.fragment = "Enemy"
-		
+
 		if (setAnotherToChase) and (not go.get(enemyScriptUrl, "isInGroup")) then	
 			local url = msg.url("main", enemyId, "Enemy")
 			go.set(url, "onlyChase", true)
@@ -46,6 +38,7 @@ end
 go.property("currentLevel", 0)
 function init(self)
 	self.enemyIds = {}
+	self.allEnemyIds = {}
 end
 
 function final(self)
@@ -54,34 +47,40 @@ function final(self)
 end
 
 function update(self, dt)
-	if (ENEMY_COUNT == 0) then				
+	if (ALL_ENEMY_COUNT == 0) then				
 		if (self.currentLevel == 1) then
-			self.enemyIds = collectionfactory.create("Enemy collection factories#level1collectionfactory")
+			self.allEnemyIds = collectionfactory.create("Enemy collection factories#level1collectionfactory")
 
 			msg.post("GUI#main", MESSAGE_IDS.INIT_LEVEL_ANNOUNCING, {level = 1})
 		end
 		
 		if (self.currentLevel == 2) then 
-			self.enemyIds = collectionfactory.create("Enemy collection factories#level2collectionfactory")
+			self.allEnemyIds = collectionfactory.create("Enemy collection factories#level2collectionfactory")
 			
 			msg.post("GUI#main", MESSAGE_IDS.INIT_LEVEL_ANNOUNCING, {level = 2})
 		end
 
 		if (self.currentLevel == 3) then
-			self.enemyIds = collectionfactory.create("Enemy collection factories#level3collectionfactory")
+			self.allEnemyIds = collectionfactory.create("Enemy collection factories#level3collectionfactory")
 
 			msg.post("GUI#main", MESSAGE_IDS.INIT_LEVEL_ANNOUNCING, {level = 3})
 		end
-		ENEMY_COUNT = ENEMY_COUNTS[self.currentLevel]
+		ALL_ENEMY_COUNT = ALL_ENEMY_COUNTS[self.currentLevel]
 		
 		self.currentLevel = self.currentLevel + 1
 	end
 end
 
 function on_message(self, message_id, message, sender)
-	if (message_id == hash(MESSAGE_IDS.ON_AN_ENEMY_DEATH)) then
-		ENEMY_COUNT = ENEMY_COUNT - 1
+	if (message_id == hash(MESSAGE_IDS.ON_ENEMY_DEATH)) then
+		ALL_ENEMY_COUNT = ALL_ENEMY_COUNT - 1
 
 		anotherEnemyChasePlayer(self, message.dead_id)
+	end
+	if (message_id == hash(MESSAGE_IDS.ADD_ENEMY_ON_SPAWN)) then
+		table.insert(self.enemyIds, message.enemy_id)
+	end
+	if (message_id == hash(MESSAGE_IDS.ON_ENEMY_BOSS_DEATH)) then
+		ALL_ENEMY_COUNT = ALL_ENEMY_COUNT - 1
 	end
 end

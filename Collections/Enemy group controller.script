@@ -24,6 +24,7 @@ end
 
 go.property("reachRandomDestination", true)
 go.property("randomPos", 0)
+go.property("numberOfEnemy", 0)
 function init(self)
 	self.enemyIds = {}
 end
