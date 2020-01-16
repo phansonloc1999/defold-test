@@ -12,7 +12,10 @@ MESSAGE_IDS = {
     CREATED_IN_GROUP = "created_in_group",
     ON_GROUP_ENEMY_DEATH = "on_enemy_group_death",
     ADD_ENEMY_ON_SPAWN = "add_enemy_on_spawn",
-    ON_ENEMY_BOSS_DEATH = "on_enemy_boss_death"
+    ON_ENEMY_BOSS_DEATH = "on_enemy_boss_death",
+    ADD_POSITION_MARKER_ON_SPAWN = "add_position_marker_on_spawn",
+    GET_NEXT_MARKED_POS = "get_next_marked_pos",
+    RECEIVE_NEXT_MARKED_POS = "receive_next_marked_pos"
 }
 
 COLLISION_OBJ_GROUPS = {BULLETS = "bullets", PLAYER = "player", ENEMIES = "enemies", CRATES = "crates"}

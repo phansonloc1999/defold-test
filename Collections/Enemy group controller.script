@@ -1,17 +1,20 @@
+RANDOM_MOVE_DURATION = 5
+MARKED_MOVE_DURATION = 1
+
 local function getRandomPos(self)
 	return vmath.vector3( math.random(0, WINDOW_WIDTH), math.random(0, WINDOW_HEIGHT), go.get_position().z)
 end
 
 local function moveRandomly(self)
-	self.reachRandomDestination = false
+	self.reachDestination = false
 	
 	self.randomPos = getRandomPos(self)
 	
-	go.animate(".", "position.x", go.PLAYBACK_ONCE_FORWARD, self.randomPos.x, go.EASING_LINEAR, 5, 0, function(self)
-		self.reachRandomDestination = true
+	go.animate(".", "position.x", go.PLAYBACK_ONCE_FORWARD, self.randomPos.x, go.EASING_LINEAR, RANDOM_MOVE_DURATION, 0, function(self)
+		self.reachDestination = true
 		moveRandomly(self)
 	end)
-	go.animate(".", "position.y", go.PLAYBACK_ONCE_FORWARD, self.randomPos.y, go.EASING_LINEAR, 5)
+	go.animate(".", "position.y", go.PLAYBACK_ONCE_FORWARD, self.randomPos.y, go.EASING_LINEAR, RANDOM_MOVE_DURATION)
 end
 
 local function vectorFloor(vector)
@@ -22,9 +25,27 @@ local function vectorFloor(vector)
 	return result
 end
 
-go.property("reachRandomDestination", true)
+local function sendGetNextMarkedPos(self)
+	msg.post(self.markedMoveControllerUrl, MESSAGE_IDS.GET_NEXT_MARKED_POS, { next_marked_pos_index = self.nextMarkedPosIndex })
+end
+
+local function moveToMarkedPos(self)
+	self.reachDestination = false
+	
+	go.animate(".", "position.x", go.PLAYBACK_ONCE_FORWARD, self.nextMarkedPos.x, go.EASING_LINEAR, MARKED_MOVE_DURATION, 0, function(self)
+		self.reachDestination = true
+		sendGetNextMarkedPos(self)
+	end)
+	go.animate(".", "position.y", go.PLAYBACK_ONCE_FORWARD, self.nextMarkedPos.y, go.EASING_LINEAR, MARKED_MOVE_DURATION)
+end
+
+go.property("reachDestination", true)
 go.property("randomPos", 0)
 go.property("numberOfEnemy", 0)
+go.property("nextMarkedPosIndex", 1)
+go.property("nextMarkedPos", vmath.vector3())
+go.property("isMoveRandomly", false)
+go.property("markedMoveControllerUrl", msg.url())
 function init(self)
 	self.enemyIds = {}
 end
@@ -35,20 +56,24 @@ function final(self)
 end
 
 function update(self, dt)
-	if (self.reachRandomDestination) then
-		moveRandomly(self)
-	else
-		-- Update enemy positions in group
-		local newPos, enemyScriptUrl
-		for key, enemyId in pairs(self.enemyIds) do
-			enemyScriptUrl = msg.url()
-			enemyScriptUrl.socket = "main"
-			enemyScriptUrl.path = enemyId
-			enemyScriptUrl.fragment = "Enemy"
-			
-			newPos = go.get_position() + go.get(enemyScriptUrl, "offsetFromGroupCenter")
-			go.set_position(vectorFloor(newPos), enemyId)
+	if (self.reachDestination) then
+		if (self.isMoveRandomly) then
+			moveRandomly(self)
+		else
+			sendGetNextMarkedPos(self)
 		end
+	end
+	
+	-- Update enemy positions in group
+	local newPos, enemyScriptUrl
+	for key, enemyId in pairs(self.enemyIds) do
+		enemyScriptUrl = msg.url()
+		enemyScriptUrl.socket = "main"
+		enemyScriptUrl.path = enemyId
+		enemyScriptUrl.fragment = "Enemy"
+		
+		newPos = go.get_position() + go.get(enemyScriptUrl, "offsetFromGroupCenter")
+		go.set_position(vectorFloor(newPos), enemyId)
 	end
 end
 
@@ -63,6 +88,16 @@ function on_message(self, message_id, message, sender)
 				break
 			end
 		end
+	end
+	if (message_id == hash(MESSAGE_IDS.RECEIVE_NEXT_MARKED_POS)) then
+		self.nextMarkedPos = message.next_marked_pos
+		self.nextMarkedPosIndex = self.nextMarkedPosIndex + 1
+
+		if (self.nextMarkedPosIndex > message.max_marked_pos_index) then
+			self.nextMarkedPosIndex = 1
+		end
+
+		moveToMarkedPos(self)
 	end
 end
 

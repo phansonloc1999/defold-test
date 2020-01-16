@@ -4,7 +4,7 @@ instances {
   prototype: "/Game objects/Enemy.go"
   position {
     x: 320.0
-    y: 309.0
+    y: 310.0
     z: 0.1
   }
   rotation {
@@ -32,7 +32,7 @@ instances {
   prototype: "/Game objects/Enemy.go"
   position {
     x: 400.0
-    y: 359.0
+    y: 360.0
     z: 0.1
   }
   rotation {
@@ -65,7 +65,7 @@ instances {
   prototype: "/Game objects/Enemy.go"
   position {
     x: 240.0
-    y: 359.0
+    y: 360.0
     z: 0.1
   }
   rotation {
@@ -98,7 +98,7 @@ instances {
   prototype: "/Game objects/Enemy.go"
   position {
     x: 320.0
-    y: 409.0
+    y: 410.0
     z: 0.1
   }
   rotation {
@@ -121,4 +121,168 @@ instances {
     z: 1.0
   }
 }
+instances {
+  id: "Position marker"
+  prototype: "/Game objects/Position marker.go"
+  position {
+    x: -50.0
+    y: 50.0
+    z: 0.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale3 {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+}
+instances {
+  id: "Position marker1"
+  prototype: "/Game objects/Position marker.go"
+  position {
+    x: 50.0
+    y: 50.0
+    z: 0.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale3 {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+}
+instances {
+  id: "Position marker2"
+  prototype: "/Game objects/Position marker.go"
+  position {
+    x: 50.0
+    y: -50.0
+    z: 0.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale3 {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+}
+instances {
+  id: "Position marker3"
+  prototype: "/Game objects/Position marker.go"
+  position {
+    x: -50.0
+    y: -50.0
+    z: 0.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale3 {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+}
+instances {
+  id: "Marked movement controller"
+  prototype: "/Game objects/Marked movement controller.go"
+  position {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  component_properties {
+    id: "Marked movement controller"
+    properties {
+      id: "maxMarkedPosIndex"
+      value: "4.0"
+      type: PROPERTY_TYPE_NUMBER
+    }
+  }
+  scale3 {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+}
+collection_instances {
+  id: "3 Enemy group"
+  collection: "/Collections/3 Enemy group.collection"
+  position {
+    x: 320.0
+    y: 535.0
+    z: 0.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  instance_properties {
+    id: "Enemy group controller"
+    properties {
+      id: "Enemy group controller"
+      properties {
+        id: "markedMoveControllerUrl"
+        value: "/collection0/Marked movement controller#Marked movement controller"
+        type: PROPERTY_TYPE_URL
+      }
+    }
+  }
+  scale3 {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+}
 scale_along_z: 0
+embedded_instances {
+  id: "3 Enemy group movement"
+  children: "Marked movement controller"
+  children: "Position marker"
+  children: "Position marker1"
+  children: "Position marker2"
+  children: "Position marker3"
+  data: ""
+  position {
+    x: 320.0
+    y: 360.0
+    z: 0.1
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale3 {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+}

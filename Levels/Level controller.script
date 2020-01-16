@@ -1,4 +1,4 @@
-ALL_ENEMY_COUNTS = { 4, 6, 6 }
+ALL_ENEMY_COUNTS = { 7, 6, 6 }
 ALL_ENEMY_COUNT = 0
 
 local function anotherEnemyChasePlayer(self, deadId)
