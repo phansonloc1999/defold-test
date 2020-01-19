@@ -121,114 +121,6 @@ instances {
     z: 1.0
   }
 }
-instances {
-  id: "Position marker"
-  prototype: "/Game objects/Position marker.go"
-  position {
-    x: -50.0
-    y: 50.0
-    z: 0.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale3 {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-  }
-}
-instances {
-  id: "Position marker1"
-  prototype: "/Game objects/Position marker.go"
-  position {
-    x: 50.0
-    y: 50.0
-    z: 0.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale3 {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-  }
-}
-instances {
-  id: "Position marker2"
-  prototype: "/Game objects/Position marker.go"
-  position {
-    x: 50.0
-    y: -50.0
-    z: 0.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale3 {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-  }
-}
-instances {
-  id: "Position marker3"
-  prototype: "/Game objects/Position marker.go"
-  position {
-    x: -50.0
-    y: -50.0
-    z: 0.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale3 {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-  }
-}
-instances {
-  id: "Marked movement controller"
-  prototype: "/Game objects/Marked movement controller.go"
-  position {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  component_properties {
-    id: "Marked movement controller"
-    properties {
-      id: "maxMarkedPosIndex"
-      value: "4.0"
-      type: PROPERTY_TYPE_NUMBER
-    }
-  }
-  scale3 {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-  }
-}
 collection_instances {
   id: "3 Enemy group"
   collection: "/Collections/3 Enemy group.collection"
@@ -249,7 +141,7 @@ collection_instances {
       id: "Enemy group controller"
       properties {
         id: "markedMoveControllerUrl"
-        value: "/collection0/Marked movement controller#Marked movement controller"
+        value: "/collection0/Square movement/Marked movement controller#Marked movement controller"
         type: PROPERTY_TYPE_URL
       }
     }
@@ -260,19 +152,13 @@ collection_instances {
     z: 1.0
   }
 }
-scale_along_z: 0
-embedded_instances {
-  id: "3 Enemy group movement"
-  children: "Marked movement controller"
-  children: "Position marker"
-  children: "Position marker1"
-  children: "Position marker2"
-  children: "Position marker3"
-  data: ""
+collection_instances {
+  id: "Square movement"
+  collection: "/Game objects/Marked movements/Square movement.collection"
   position {
     x: 320.0
     y: 360.0
-    z: 0.1
+    z: 0.0
   }
   rotation {
     x: 0.0
@@ -286,3 +172,4 @@ embedded_instances {
     z: 1.0
   }
 }
+scale_along_z: 0
