@@ -154,7 +154,7 @@ collection_instances {
 }
 collection_instances {
   id: "Square movement"
-  collection: "/Game objects/Marked movements/Square movement.collection"
+  collection: "/Collections/Marked movements/Square movement.collection"
   position {
     x: 320.0
     y: 360.0

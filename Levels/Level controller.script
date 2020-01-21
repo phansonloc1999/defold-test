@@ -5,6 +5,7 @@ local function anotherEnemyChasePlayer(self, deadId)
 	local setAnotherToChase = false
 
 	--- Remove dead enemy
+	--- If dead enemy is chasing player, set another to chase player
 	for key, valueId in pairs(self.enemyIds) do
 		if (hash_to_hex(deadId) == hash_to_hex(valueId)) then
 			local url = msg.url("main", deadId, "Enemy")
@@ -12,7 +13,7 @@ local function anotherEnemyChasePlayer(self, deadId)
 				setAnotherToChase = true
 			end
 
-			self.enemyIds[key] = nil -- remove dead enemy from ids
+			table.remove(self.enemyIds, key) -- remove dead enemy from ids
 			break
 		end
 	end
