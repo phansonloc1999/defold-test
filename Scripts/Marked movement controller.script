@@ -9,8 +9,6 @@ function final(self)
 end
 
 function update(self, dt)
-	-- Add update code here
-	-- Remove this function if not needed
 end
 
 function on_message(self, message_id, message, sender)
@@ -26,6 +24,12 @@ function on_message(self, message_id, message, sender)
 				max_marked_pos_index = self.maxMarkedPosIndex
 			}
 		)
+	end
+	if (message_id == hash(MESSAGE_IDS.REMOVE_MARKED_MOVEMENT_CONTROLLER)) then
+		for i = 1, #self.positionMarkers do 
+			go.delete(self.positionMarkers[i])
+		end
+		go.delete()
 	end
 end
 

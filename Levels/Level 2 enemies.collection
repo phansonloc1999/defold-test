@@ -125,8 +125,13 @@ collection_instances {
     properties {
       id: "Enemy group controller"
       properties {
+        id: "numberOfEnemies"
+        value: "3.0"
+        type: PROPERTY_TYPE_NUMBER
+      }
+      properties {
         id: "markedMoveControllerUrl"
-        value: "/collection0/Triangle movement/Marked movement controller#Marked movement controller"
+        value: "/collection1/Triangle movement/Marked movement controller#Marked movement controller"
         type: PROPERTY_TYPE_URL
       }
     }

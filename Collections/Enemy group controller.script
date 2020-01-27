@@ -41,7 +41,7 @@ end
 
 go.property("reachDestination", true)
 go.property("randomPos", 0)
-go.property("numberOfEnemy", 0)
+go.property("numberOfEnemies", 0)
 go.property("nextMarkedPosIndex", 1)
 go.property("nextMarkedPos", vmath.vector3())
 go.property("isMoveRandomly", false)
@@ -85,8 +85,15 @@ function on_message(self, message_id, message, sender)
 		for key, enemyId in pairs(self.enemyIds) do
 			if (hash_to_hex(enemyId) == hash_to_hex(message.dead_id)) then
 				self.enemyIds[key] = nil
+				self.numberOfEnemies = self.numberOfEnemies - 1
 				break
 			end
+		end
+		-- Remove group controller and marked movement controller
+		-- when all enemies in group is dead
+		if (self.numberOfEnemies <= 0) then
+			msg.post(self.markedMoveControllerUrl, MESSAGE_IDS.REMOVE_MARKED_MOVEMENT_CONTROLLER)
+			go.delete()
 		end
 	end
 	if (message_id == hash(MESSAGE_IDS.RECEIVE_NEXT_MARKED_POS)) then

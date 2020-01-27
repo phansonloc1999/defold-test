@@ -15,7 +15,8 @@ MESSAGE_IDS = {
     ON_ENEMY_BOSS_DEATH = "on_enemy_boss_death",
     ADD_POSITION_MARKER_ON_SPAWN = "add_position_marker_on_spawn",
     GET_NEXT_MARKED_POS = "get_next_marked_pos",
-    RECEIVE_NEXT_MARKED_POS = "receive_next_marked_pos"
+    RECEIVE_NEXT_MARKED_POS = "receive_next_marked_pos",
+    REMOVE_MARKED_MOVEMENT_CONTROLLER = "remove_marked_movement_controller"
 }
 
 COLLISION_OBJ_GROUPS = {BULLETS = "bullets", PLAYER = "player", ENEMIES = "enemies", CRATES = "crates"}
