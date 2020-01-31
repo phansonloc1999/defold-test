@@ -23,6 +23,7 @@ end
 local function spawnPlayer(self)
     msg.post(".", "release_input_focus")
     self.health = 100
+    PLAYER_BULLET_TYPE = BULLET_TYPES.SMALL
 
     msg.post("GUI#main", MESSAGE_IDS.SET_HEALTH_FILL_WIDTH, { health = self.health })
     triggerInvulnerability(self)

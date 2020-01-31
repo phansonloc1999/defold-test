@@ -16,6 +16,16 @@ instances {
   component_properties {
     id: "Enemy"
     properties {
+      id: "hasCrate"
+      value: "true"
+      type: PROPERTY_TYPE_BOOLEAN
+    }
+    properties {
+      id: "crateItemId"
+      value: "2.0"
+      type: PROPERTY_TYPE_NUMBER
+    }
+    properties {
       id: "onlyMoveRandom"
       value: "true"
       type: PROPERTY_TYPE_BOOLEAN
@@ -109,6 +119,16 @@ instances {
   }
   component_properties {
     id: "Enemy"
+    properties {
+      id: "hasCrate"
+      value: "true"
+      type: PROPERTY_TYPE_BOOLEAN
+    }
+    properties {
+      id: "crateItemId"
+      value: "1.0"
+      type: PROPERTY_TYPE_NUMBER
+    }
     properties {
       id: "onlyMoveRandom"
       value: "true"
