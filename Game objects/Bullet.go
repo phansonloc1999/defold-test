@@ -65,7 +65,7 @@ embedded_components {
 embedded_components {
   id: "Small sprite"
   type: "sprite"
-  data: "tile_set: \"/Assets/Graphics/bullet.tilesource\"\n"
+  data: "tile_set: \"/Assets/Graphics/Bullets/bullet.tilesource\"\n"
   "default_animation: \"anim\"\n"
   "material: \"/builtins/materials/sprite.material\"\n"
   "blend_mode: BLEND_MODE_ALPHA\n"

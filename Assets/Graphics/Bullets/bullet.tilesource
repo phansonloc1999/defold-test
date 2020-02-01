@@ -1,4 +1,4 @@
-image: "/Assets/Graphics/bullet.png"
+image: "/Assets/Graphics/Bullets/bullet.png"
 tile_width: 10
 tile_height: 10
 tile_margin: 0
