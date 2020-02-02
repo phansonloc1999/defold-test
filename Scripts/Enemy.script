@@ -11,13 +11,17 @@ local function getRandomPos()
 	return { x = math.random(ENEMY_WIDTH / 2, WINDOW_WIDTH - ENEMY_WIDTH / 2), y = math.random(ENEMY_HEIGHT / 2, WINDOW_HEIGHT - ENEMY_HEIGHT / 2) }
 end
 
-local MOVE_DURATION = 2
 moveRandomly = function(self)
 	self.movingToPos = getRandomPos()
-	go.animate(".", "position.x", go.PLAYBACK_ONCE_FORWARD, self.movingToPos.x, go.EASING_LINEAR, MOVE_DURATION, 0, function(self)
+	
+	local curPos = go.get_world_position()
+	local distance = math.sqrt(math.pow(self.movingToPos.x - curPos.x, 2) + math.pow(self.movingToPos.y - curPos.y, 2))
+	local moveDuration = distance / self.speed
+	
+	go.animate(".", "position.x", go.PLAYBACK_ONCE_FORWARD, self.movingToPos.x, go.EASING_LINEAR, moveDuration, 0, function(self)
 		moveRandomly(self)
 	end)
-	go.animate(".", "position.y", go.PLAYBACK_ONCE_FORWARD, self.movingToPos.y, go.EASING_LINEAR, MOVE_DURATION, 0)
+	go.animate(".", "position.y", go.PLAYBACK_ONCE_FORWARD, self.movingToPos.y, go.EASING_LINEAR, moveDuration, 0)
 end
 
 local CHASING_DURATION = 3
@@ -40,7 +44,7 @@ local function flickersWhenDamaged(self)
 			msg.post(id, "enable")
 			self.isEnabled = true
 		end
-	end):finish(function() 
+	end):finish(function()
 		self.invulnerable = false 
 	end)
 	self.invulnerableTimer:limit(5)
@@ -56,6 +60,7 @@ go.property("onlyMoveRandom", false)
 go.property("chaseFinished", true)
 go.property("isInGroup", false)
 go.property("offsetFromGroupCenter", vmath.vector3())
+go.property("speed", 50)
 
 function init(self)
 	self.health = ENEMY_HEALTH
