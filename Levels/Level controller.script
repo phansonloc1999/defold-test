@@ -29,7 +29,7 @@ local function anotherEnemyChasePlayer(self, deadId)
 		if (setAnotherToChase) and (not go.get(enemyScriptUrl, "isInGroup")) then	
 			local url = msg.url("main", enemyId, "Enemy")
 			go.set(url, "onlyChase", true)
-			go.set(url, "chaseFinished", true)
+			go.set(url, "reachedDestination", true)
 			go.set(url, "onlyMoveRandom", false)
 			setAnotherToChase = false
 		end
